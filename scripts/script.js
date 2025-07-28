@@ -98,7 +98,9 @@ class PokemonAPI {
     }
 }
 
-// Ladeanimation mit Pokeball
+/**
+ * Zeigt das ausgewählte Pokemon in der Arena an
+ */
 function showLoadingAnimation() {
     console.log('🔴 Pokeball rollt... Lade Pokemon Daten...');
     const loadingScreen = document.getElementById('loading-screen');
@@ -106,37 +108,36 @@ function showLoadingAnimation() {
         loadingScreen.style.display = 'flex';
     }
 }
-
+/**
+ *  * Versteckt die Ladeanimation und zeigt die Haupt-App an
+ */
 function hideLoadingAnimation() {
     console.log('✅ Pokemon Daten geladen!');
     const loadingScreen = document.getElementById('loading-screen');
-    const mainApp = document.getElementById('main-app');
-    
+    const mainApp = document.getElementById('main-app');   
     if (loadingScreen && mainApp) {
         loadingScreen.style.display = 'none';
-        mainApp.classList.remove('hidden');
-        
+        mainApp.classList.remove('hidden');    
         // Arena Video starten
         initializeArena();
     }
 }
 
-// Arena Video Management
+/**
+ *  Spielt das Arena video ab und zeigt das PNG bei Ende an
+ */
 function initializeArena() {
     const arenaVideo = document.getElementById('arena-video');
-    const arenaBackground = document.getElementById('arena-background');
-    
+    const arenaBackground = document.getElementById('arena-background');    
     if (arenaVideo) {
         // Video sofort starten
         arenaVideo.play().catch(error => {
             console.log('Autoplay nicht möglich, zeige PNG direkt:', error);
             handleArenaVideoEnd();
         });
-        
         // Event Listener für Video-Ende
-        arenaVideo.addEventListener('ended', handleArenaVideoEnd);
-        
-        // Fallback: Wenn Video nicht lädt, nach 3 Sekunden PNG zeigen
+        arenaVideo.addEventListener('ended', handleArenaVideoEnd); 
+        //Wenn Video nicht lädt, nach 3 Sekunden PNG zeigen
         setTimeout(() => {
             if (arenaVideo.currentTime === 0) {
                 console.log('Video lädt nicht, zeige PNG');
@@ -146,36 +147,35 @@ function initializeArena() {
     }
 }
 
-// Video → PNG Übergang
+/**
+ *  * Video → PNG Übergang
+ */
 function handleArenaVideoEnd() {
     const arenaVideo = document.getElementById('arena-video');
     const arenaBackground = document.getElementById('arena-background');
-    
     console.log('🎬 Arena Video beendet - Wechsel zu PNG');
-    
     if (arenaVideo && arenaBackground) {
         // weciher Übergang von Video zu PNG
         arenaVideo.style.opacity = '0';
         arenaVideo.style.transition = 'opacity 0.5s ease-in-out';
-        
         // PNG nach kurzer Verzögerung einblenden
         setTimeout(() => {
             arenaVideo.style.display = 'none';
             arenaBackground.classList.remove('hidden');
             arenaBackground.style.opacity = '0';
             arenaBackground.style.transition = 'opacity 1.5s ease-out';
-            
             // PNG einblenden
             requestAnimationFrame(() => {
                 arenaBackground.style.opacity = '1';
             });
-            
             console.log('✅ Arena bereit für Pokemon Auswahl!');
         }, 100);
     }
 }
 
-// Pokemon Auswahl und Arena-Interaktion
+/**
+ *   Zeigt das ausgewählte Pokemon in der Arena an
+ */
 function selectPokemon(pokemonData) {
     currentPokemon = pokemonData;
     console.log(`🎯 Pokemon ausgewählt: ${pokemonData.germanName}`);
@@ -190,14 +190,14 @@ function selectPokemon(pokemonData) {
         displayPokemonInArena(pokemonData);
     });
 }
-
+/**
+ *  * Animiert den Pokeball zur Arena und zeigt das Pokemon an
+ */
 function animatePokeballToArena(callback) {
     const pokeballAnimation = document.getElementById('pokeball-animation');
-    
     if (pokeballAnimation) {
         pokeballAnimation.classList.remove('hidden');
         pokeballAnimation.style.animation = 'flyToArena 2s ease-in-out forwards';
-        
         // Nach Animation: Pokemon anzeigen
         setTimeout(() => {
             pokeballAnimation.classList.add('hidden');
@@ -208,85 +208,10 @@ function animatePokeballToArena(callback) {
     }
 }
 
-function displayPokemonInArena(pokemonData) {
-    const selectedPokemon = document.getElementById('selected-pokemon');
-    const pokemonSprite = document.getElementById('pokemon-sprite');
-    const pokemonName = document.getElementById('pokemon-name');
-    const pokemonTypes = document.getElementById('pokemon-types');
-    const pokemonStats = document.getElementById('pokemon-stats');
-    
-    if (selectedPokemon && pokemonSprite && pokemonName) {
-        // Pokemon Bild setzen
-        pokemonSprite.src = pokemonData.sprites.official || pokemonData.sprites.front;
-        pokemonSprite.alt = pokemonData.germanName;
-        
-        // Pokemon Name
-        pokemonName.textContent = pokemonData.germanName;
-        
-        // Pokemon Typen
-        if (pokemonTypes) {
-            pokemonTypes.innerHTML = pokemonData.types
-                .map(type => `<span class="type type-${type}">${getGermanTypeName(type)}</span>`)
-                .join('');
-        }
-        
-        // Pokemon Stats
-        if (pokemonStats) {
-            pokemonStats.innerHTML = `
-                <div class="stat">
-                    <span>KP:</span>
-                    <span>${pokemonData.stats.hp}</span>
-                </div>
-                <div class="stat">
-                    <span>Angriff:</span>
-                    <span>${pokemonData.stats.attack}</span>
-                </div>
-                <div class="stat">
-                    <span>Verteidigung:</span>
-                    <span>${pokemonData.stats.defense}</span>
-                </div>
-                <div class="stat">
-                    <span>Initiative:</span>
-                    <span>${pokemonData.stats.speed}</span>
-                </div>
-            `;
-        }
-        
-        // Pokemon in Arena einblenden
-        selectedPokemon.classList.remove('hidden');
-        selectedPokemon.style.animation = 'pokemonAppear 1s ease-in-out forwards';
-        
-        console.log(`✨ ${pokemonData.germanName} erscheint in der Arena!`);
-    }
-}
 
-// Hilfsfunktion für deutsche Typ-Namen
-function getGermanTypeName(englishType) {
-    const typeTranslations = {
-        'fire': 'Feuer',
-        'water': 'Wasser',
-        'grass': 'Pflanze',
-        'electric': 'Elektro',
-        'psychic': 'Psycho',
-        'ice': 'Eis',
-        'dragon': 'Drache',
-        'dark': 'Unlicht',
-        'fairy': 'Fee',
-        'fighting': 'Kampf',
-        'poison': 'Gift',
-        'ground': 'Boden',
-        'flying': 'Flug',
-        'bug': 'Käfer',
-        'rock': 'Gestein',
-        'ghost': 'Geist',
-        'steel': 'Stahl',
-        'normal': 'Normal'
-    };
-    
-    return typeTranslations[englishType] || englishType;
-}
-
-// App Initialisierung
+/**
+ *  
+ */
 async function initializePokedex() {
     showLoadingAnimation();
     
