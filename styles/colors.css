@@ -1,0 +1,101 @@
+/* Pokemon Type Colors */
+.type-fire {
+  background: #ff6b6b;
+}
+
+.type-water {
+  background: #74b9ff;
+}
+
+.type-grass {
+  background: #00b894;
+}
+
+.type-electric {
+  background: #fdcb6e;
+  color: black;
+}
+
+.type-psychic {
+  background: #a29bfe;
+}
+
+.type-ice {
+  background: #74b9ff;
+}
+
+.type-dragon {
+  background: #6c5ce7;
+}
+
+.type-dark {
+  background: #2d3436;
+}
+
+.type-fairy {
+  background: #fd79a8;
+}
+
+.type-fighting {
+  background: #e17055;
+}
+
+.type-poison {
+  background: #a29bfe;
+}
+
+.type-ground {
+  background: #fdcb6e;
+}
+
+.type-flying {
+  background: #81ecec;
+}
+
+.type-bug {
+  background: #00b894;
+}
+
+.type-rock {
+  background: #636e72;
+}
+
+.type-ghost {
+  background: #6c5ce7;
+}
+
+.type-steel {
+  background: #b2bec3;
+}
+
+.type-normal {
+  background: #ddd;
+  color: black;
+}
+
+
+
+#card-overlay-content {
+  border: 6px solid transparent;
+  transition: border-color 0.3s;
+}
+
+/* Für jeden Typ eine eigene Border-Farbe */
+#card-overlay-content.type-fire    { border-color: #ff6b6b; }
+#card-overlay-content.type-water   { border-color: #74b9ff; }
+#card-overlay-content.type-grass   { border-color: #00b894; }
+#card-overlay-content.type-electric{ border-color: #fdcb6e; }
+#card-overlay-content.type-psychic { border-color: #a29bfe; }
+#card-overlay-content.type-ice     { border-color: #74b9ff; }
+#card-overlay-content.type-dragon  { border-color: #6c5ce7; }
+#card-overlay-content.type-dark    { border-color: #2d3436; }
+#card-overlay-content.type-fairy   { border-color: #fd79a8; }
+#card-overlay-content.type-fighting{ border-color: #e17055; }
+#card-overlay-content.type-poison  { border-color: #a29bfe; }
+#card-overlay-content.type-ground  { border-color: #fdcb6e; }
+#card-overlay-content.type-flying  { border-color: #81ecec; }
+#card-overlay-content.type-bug     { border-color: #00b894; }
+#card-overlay-content.type-rock    { border-color: #636e72; }
+#card-overlay-content.type-ghost   { border-color: #6c5ce7; }
+#card-overlay-content.type-steel   { border-color: #b2bec3; }
+#card-overlay-content.type-normal  { border-color: #ddd; }

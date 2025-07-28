@@ -272,80 +272,7 @@ img {
   font-size: 0.9rem;
 }
 
-/* Pokemon Type Colors */
-.type-fire {
-  background: #ff6b6b;
-}
 
-.type-water {
-  background: #74b9ff;
-}
-
-.type-grass {
-  background: #00b894;
-}
-
-.type-electric {
-  background: #fdcb6e;
-  color: black;
-}
-
-.type-psychic {
-  background: #a29bfe;
-}
-
-.type-ice {
-  background: #74b9ff;
-}
-
-.type-dragon {
-  background: #6c5ce7;
-}
-
-.type-dark {
-  background: #2d3436;
-}
-
-.type-fairy {
-  background: #fd79a8;
-}
-
-.type-fighting {
-  background: #e17055;
-}
-
-.type-poison {
-  background: #a29bfe;
-}
-
-.type-ground {
-  background: #fdcb6e;
-}
-
-.type-flying {
-  background: #81ecec;
-}
-
-.type-bug {
-  background: #00b894;
-}
-
-.type-rock {
-  background: #636e72;
-}
-
-.type-ghost {
-  background: #6c5ce7;
-}
-
-.type-steel {
-  background: #b2bec3;
-}
-
-.type-normal {
-  background: #ddd;
-  color: black;
-}
 
 .pokemon-stats {
   display: grid;
@@ -379,7 +306,92 @@ img {
   filter: drop-shadow(0 0 15px rgba(255, 23, 68, 0.8));
 }
 
+/* Switch */
+.view-switch {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+.switch-btn {
+  padding: 8px 18px;
+  border-radius: 20px;
+  border: none;
+  background: var(--primary);
+  color: var(--text-dark);
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.switch-btn.active {
+  background: var(--secondary);
+  color: #fff;
+}
+.switch-label {
+  font-size: 1.1rem;
+  color: var(--text-light);
+}
 
+/* Overlay */
+.card-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(26,26,46,0.95);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+}
+.card-overlay.hidden {
+  display: none;
+}
+#card-overlay-content {
+  background: #fff;
+  border-radius: 20px;
+  padding: 32px 24px;
+  min-width: 320px;
+  max-width: 90vw;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.nav-btn {
+  background: var(--primary);
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  font-size: 2rem;
+  color: var(--text-dark);
+  cursor: pointer;
+  transition: background 0.2s;
+  align-self: center;
+}
+.nav-btn, .close-btn {
+  background: var(--primary);
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  font-size: 2rem;
+  color: var(--text-dark);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.close-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 1.5rem;
+  width: 36px;
+  height: 36px;
+  background: var(--accent);
+  color: #fff;
+}
 
 /* Pokemon Karten Auswahl - Overlay */
 .pokemon-selection {
@@ -732,5 +744,70 @@ img {
   .pokemon-selection.active {
     max-width: 1920px;
         margin-left: 820px !important;
+  }
+}
+@media (max-width: 480px) {
+  .card-overlay {
+    flex-direction: column;
+    gap: 0;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  #card-overlay-content {
+    margin-top: 40px;
+  }
+  .nav-btn {
+    position: absolute;
+    top: 8px;
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+    z-index: 2;
+    background: var(--primary);
+  }
+  #prev-pokemon {
+    left: 8px;
+  }
+  #next-pokemon {
+    right: 8px;
+  }
+  /* Stelle sicher, dass das Overlay-Content relativ positioniert ist */
+  #card-overlay-content {
+    position: relative;
+  }
+}
+@media (max-width: 340px) {
+  #card-overlay-content {
+    min-width: 180px;
+    max-width: 96vw;
+    padding: 10px 4px;
+  }
+  .pokemon-card.large img {
+    width: 220px !important;
+    height: 220px !important;
+  }
+  .pokemon-card.large h2 {
+    font-size: 1rem !important;
+  }
+  .pokemon-stats {
+    font-size: 0.8rem !important;
+  }
+  .nav-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 1.1rem;
+  }
+}
+@media (max-width: 485px) {
+  .close-btn {
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: 36px;
+    height: 36px;
+    font-size: 1.5rem;
+    z-index: 3;
   }
 }

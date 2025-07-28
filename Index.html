@@ -7,10 +7,12 @@
     <title>Pokédex Arena</title>
     <link rel="stylesheet" href="./styles/style.css" />
     <link rel="stylesheet" href="./styles/animation.css" />
+    <link rel="stylesheet" href="./styles/colors.css" />
     <script src="./scripts/db.js" defer></script>
     <script src="./scripts/template.js" defer></script>
     <script src="./scripts/script.js" defer></script>
     <script src="./scripts/template.js" defer></script>
+    <script src="./scripts/cardoverlay.js" defer></script>
     <link rel="icon" href="./icons/fav.ico" type="image/x-icon">
 </head>
 
@@ -46,10 +48,11 @@
                 </div>
                 <!-- Ausgewähltes Pokemon in der Arena -->
                 <div id="selected-pokemon" class="selected-pokemon hidden">
-                    
+
                     <div class="pokemon-info">
                         <h2 id="pokemon-name"></h2>
-                        <img src="./img/ball-pokemon-unscreen.gif" alt="Pokeball" class="back-to-ball-btn" onclick="backToBall()">
+                        <img src="./img/ball-pokemon-unscreen.gif" alt="Pokeball" class="back-to-ball-btn"
+                            onclick="backToBall()">
                         <div class="pokemon-types" id="pokemon-types"></div>
                         <div class="pokemon-stats" id="pokemon-stats"></div>
                         <img id="pokemon-sprite" class="pokemon-sprite" src="" alt="">
@@ -64,8 +67,23 @@
         </section>
 
         <!-- Pokemon Karten Auswahl -->
+
+        
         <section id="pokemon-selection" class="pokemon-selection">
             <div class="selection-header">
+                <div class="view-switch">
+            <button id="arena-view-btn" class="switch-btn active">← Arena</button>
+            <span class="switch-label">Ansicht wechseln</span>
+            <button id="card-view-btn" class="switch-btn">Kartenansicht →</button>
+        </div>
+
+        <!-- Overlay für Kartenansicht -->
+        <div id="card-overlay" class="card-overlay hidden">
+            <button id="prev-pokemon" class="nav-btn">←</button>
+            <div id="card-overlay-content"></div>
+            <button id="next-pokemon" class="nav-btn">→</button>
+            <button id="close-card-overlay" class="close-btn">✖</button>
+        </div>
                 <h1>Wähle dein Pokémon</h1>
                 <div class="search-container">
                     <input type="text" id="pokemon-search" placeholder="Pokémon suchen..." class="search-input">
