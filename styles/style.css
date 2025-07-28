@@ -223,7 +223,7 @@ img {
 /* Ausgewähltes Pokemon in der Arena */
 .selected-pokemon {
   position: absolute;
-  top: 46%;
+  top: 66%;
   left: 63%;
   transform: translateX(-50%);
   z-index: 5;
@@ -709,19 +709,27 @@ img {
 }
 @media (min-width: 1800px) {
   .selected-pokemon {
-    top: 60%;
-    left: 50%;
+    top: 25%;
+    left: 42%;
     transform: translate(-50%, -50%);
     width: 36vw;           /* vorher 32vw */
-    max-width: 660px;      /* vorher 600px */
-    padding: 44px 3.3vw;   /* vorher 40px 3vw */
+    max-width: 60px;      /* vorher 600px */
+    padding: 4px 3.3vw;   /* vorher 40px 3vw */
   }
   .selected-pokemon img{
-    width: 500px;          /* vorher 320px */
-    height: 500px;
+    width: 320px;          /* vorher 320px */
+    height: 320px;
     /* margin-left: 0 !important; */
   }
-
+  .back-to-ball-btn {
+    position: absolute;
+    top: 32px;
+    right: 1px;
+    cursor: pointer;
+    width: 172px !important;
+    height: 61px !important;
+    z-index: 20;
+  }
   .pokemon-sprite {
     width: 500px;          /* vorher 320px */
     height: 500px;

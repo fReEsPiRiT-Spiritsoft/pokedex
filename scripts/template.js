@@ -69,5 +69,3 @@ function getGermanTypeName(englishType) {
     };    
     return typeTranslations[englishType] || englishType;
 }
-
-
