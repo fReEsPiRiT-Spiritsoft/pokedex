@@ -833,7 +833,38 @@ img {
   #card-overlay-content {
     position: relative;
   }
+    .pokemon-selection.active {
+    position: fixed; /* statt absolute */
+    top: 0;          /* statt nur bottom: 0 */
+    height: 100vh;   /* volle Bildschirmhöhe */
+    width: 100%;
+    z-index: 999;    /* über allem anderen */
+    padding-top: 60px !important; /* Platz für Header */
+    margin: 0 !important;
+    background: rgba(26, 26, 46, 0.98); /* dunklerer Hintergrund für bessere Lesbarkeit */
+    overflow-y: auto;
+  }
+  
+  /*Mehr Platz für die Karten
+  .pokemon-cards {
+    max-height: calc(100vh - 250px);
+    margin-bottom: 40px;
+  }
+  
+  /* Header kleiner machen für mehr Kartenplatz */
+  .selection-header h1 {
+    font-size: 1.6rem;
+    margin-bottom: 10px;
+  }
+  
+  /* Zurück-Button deutlicher gestalten */
+  .switch-btn#arena-view-btn {
+    background: var(--secondary);
+    color: white;
+    padding: 10px 20px;
+  }
 }
+
 
 @media (max-width: 340px) {
   #card-overlay-content {
