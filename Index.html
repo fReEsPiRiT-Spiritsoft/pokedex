@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pokédex Arena</title>
+    <link rel="stylesheet" href="./styles/style.css" />
+    <script src="./scripts/db.js" defer></script>
+    <script src="./scripts/template.js" defer></script>
+    <script src="./scripts/script.js" defer></script>
+    <link rel="icon" href="./icons/fav.ico" type="image/x-icon">
+</head>
+
+<body>
+    <!-- Ladescreen mit Pokeball Animation -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="pokeball-loader">
+            <div class="pokeball">
+                <div class="pokeball-top"></div>
+                <div class="pokeball-middle"></div>
+                <div class="pokeball-bottom"></div>
+            </div>
+            <p>Lade Pokémon...</p>
+        </div>
+    </div>
+
+    <!-- Haupt-Container -->
+    <div id="main-app" class="main-app hidden">
+
+        <!-- Pokemon Arena Section -->
+        <section id="pokemon-arena" class="pokemon-arena">
+            <div class="arena-container">
+                <!-- Video Background für Arena Intro -->
+                <video id="arena-video" class="arena-video" muted autoplay onended="handleArenaVideoEnd()">
+                    <source src="./img/arena.mp4" type="video/mp4">
+                    <!-- Fallback für Browser ohne Video Support -->
+                </video>
+
+                <!-- Statisches Arena Bild (wird nach Video angezeigt) -->
+                <img id="arena-background" class="arena-background hidden" src="./img/arena.png" alt="Pokemon Arena">
+                <div id="open-selection-btn" class="open-selection-btn">
+                    <img src="./img/ball-pokemon-unscreen.gif" alt="Pokeball auswählen" />
+                </div>
+                <!-- Ausgewähltes Pokemon in der Arena -->
+                <div id="selected-pokemon" class="selected-pokemon hidden">
+                    
+                    <div class="pokemon-info">
+                        <h2 id="pokemon-name"></h2>
+                        <img src="./img/ball-pokemon-unscreen.gif" alt="Pokeball" class="back-to-ball-btn" onclick="backToBall()">
+                        <div class="pokemon-types" id="pokemon-types"></div>
+                        <div class="pokemon-stats" id="pokemon-stats"></div>
+                        <img id="pokemon-sprite" class="pokemon-sprite" src="" alt="">
+                    </div>
+                </div>
+
+                <!-- Pokeball Animation für Auswahl -->
+                <div id="pokeball-animation" class="pokeball-animation hidden">
+                    <img src="./img/ball-pokemon-unscreen.gif" alt="Pokeball" class="flying-pokeball">
+                </div>
+            </div>
+        </section>
+
+        <!-- Pokemon Karten Auswahl -->
+        <section id="pokemon-selection" class="pokemon-selection">
+            <div class="selection-header">
+                <h1>Wähle dein Pokémon</h1>
+                <div class="search-container">
+                    <input type="text" id="pokemon-search" placeholder="Pokémon suchen..." class="search-input">
+                    <button id="search-btn" class="search-btn">🔍</button>
+                </div>
+            </div>
+
+            <!-- Filter Buttons -->
+            <div class="filter-container">
+                <button class="filter-btn active" data-type="all">Alle</button>
+                <button class="filter-btn" data-type="fire">🔥 Feuer</button>
+                <button class="filter-btn" data-type="water">💧 Wasser</button>
+                <button class="filter-btn" data-type="grass">🌿 Pflanze</button>
+                <button class="filter-btn" data-type="electric">⚡ Elektro</button>
+                <button class="filter-btn" data-type="psychic">🔮 Psycho</button>
+                <button class="filter-btn" data-type="ice">❄️ Eis</button>
+                <button class="filter-btn" data-type="dragon">🐉 Drache</button>
+                <button class="filter-btn" data-type="dark">🌚 Unlicht</button>
+                <button class="filter-btn" data-type="fairy">🧚 Fee</button>
+            </div>
+
+            <!-- Pokemon Karten Grid -->
+            <div id="pokemon-cards" class="pokemon-cards">
+                <!-- Karten werden hier dynamisch eingefügt -->
+            </div>
+
+            <!-- Lade-mehr Button -->
+            <div class="load-more-container">
+                <button id="load-more" class="load-more-btn hidden">Mehr Pokémon laden</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- Pokemon Karten Template (wird von JavaScript verwendet) -->
+    <template id="pokemon-card-template">
+        <div class="pokemon-card" data-pokemon-id="">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="card-header">
+                        <span class="pokemon-id">#000</span>
+                        <div class="pokemon-types-small"></div>
+                    </div>
+                    <div class="pokemon-image-container">
+                        <img class="pokemon-image" src="" alt="">
+                    </div>
+                    <div class="card-footer">
+                        <h3 class="pokemon-name"></h3>
+                        <p class="pokemon-name-german"></p>
+                    </div>
+                </div>
+                <div class="card-back">
+                    <div class="pokemon-stats-detailed">
+                        <h4>Stats</h4>
+                        <div class="stat-bar">
+                            <span>KP</span>
+                            <div class="stat-value"><span class="hp-value"></span></div>
+                        </div>
+                        <div class="stat-bar">
+                            <span>Angriff</span>
+                            <div class="stat-value"><span class="attack-value"></span></div>
+                        </div>
+                        <div class="stat-bar">
+                            <span>Verteidigung</span>
+                            <div class="stat-value"><span class="defense-value"></span></div>
+                        </div>
+                        <div class="stat-bar">
+                            <span>Initiative</span>
+                            <div class="stat-value"><span class="speed-value"></span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+</body>
+
+</html>
