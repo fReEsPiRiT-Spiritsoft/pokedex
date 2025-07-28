@@ -348,11 +348,11 @@ img {
   display: none;
 }
 #card-overlay-content {
-  background: #fff;
   border-radius: 20px;
-  padding: 32px 24px;
-  min-width: 320px;
-  max-width: 90vw;
+  padding: 40px 30px 30px;
+  min-width: 340px;
+  max-width: 94vw;
+  max-height: 85vh;
   box-shadow: 0 8px 32px rgba(0,0,0,0.3);
   position: relative;
   display: flex;
@@ -399,7 +399,8 @@ img {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 50vh;
+  height: 65vh;
+  width: 100%;
   background: linear-gradient(transparent, rgba(26, 26, 46, 0.95));
   backdrop-filter: blur(10px);
   z-index: 10;
@@ -533,7 +534,16 @@ img {
   justify-content: center;
   align-items: center;
 }
-
+.pokemon-card.large h2 {
+  font-size: 2.5rem;
+  margin: 0 0 20px 0;
+  text-align: center;
+  width: 100%;
+  position: relative;
+  z-index: 10;
+  background: inherit;
+  order: -1; /* Immer ganz oben */
+}
 .pokemon-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 12px 40px rgba(255, 203, 5, 0.4);
@@ -707,7 +717,7 @@ img {
     align-items: center;
   }
 }
-@media (min-width: 1800px) {
+@media (min-width: 2400px) {
   .selected-pokemon {
     top: 25%;
     left: 42%;
@@ -750,9 +760,11 @@ img {
     font-size: 1.32em;     /* vorher 1.2em */
   }
   .pokemon-selection.active {
-    max-width: 1920px;
-        margin-left: 820px !important;
-  }
+        max-width: 1920px;
+        margin-left: 969px !important;
+        max-height: fit-content;
+        margin-bottom: 407px !important;
+    }
 }
 @media (max-width: 480px) {
   .card-overlay {

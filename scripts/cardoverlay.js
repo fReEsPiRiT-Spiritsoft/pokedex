@@ -59,27 +59,34 @@ function openCardOverlay(pokemonList, idx) {
     };
 }
 
-// Overlay-Inhalt rendern (angepasst an dein Kartendesign)
 function renderCardOverlayContent(pokemon) {
+    console.log('Overlay-Pokemon:', pokemon);
     const content = document.getElementById('card-overlay-content');
     // Typ-Klasse setzen (erster Typ)
-    content.className = '';
+    content.className = 'card-overlay-content';
     if (pokemon.types && pokemon.types.length > 0) {
         content.classList.add('type-' + pokemon.types[0]);
     }
+
+    // Fallbacks für Name und Fähigkeiten
+    const name = pokemon.germanName || pokemon.name || 'Unbekannt';
+    const abilities = Array.isArray(pokemon.abilities) && pokemon.abilities.length > 0
+        ? pokemon.abilities.join(', ')
+        : 'Keine Fähigkeiten gefunden';
+
     content.innerHTML = `
         <div class="pokemon-card large">
-            <img src="${pokemon.sprites.official || pokemon.sprites.front}" alt="${pokemon.germanName}" style="width:180px;height:180px;">
-            <h2>${pokemon.germanName}</h2>
+            <img src="${pokemon.sprites.official || pokemon.sprites.front}" alt="${name}" style="width:180px;height:180px;">
+            <h2>${name}</h2>
             <div>${pokemon.types.map(t => `<span class="type type-${t}">${getGermanTypeName(t)}</span>`).join(' ')}</div>
             <div class="pokemon-stats">
-                <div class="stat"><span>KP:</span><span>${pokemon.stats.hp}</span></div>
-                <div class="stat"><span>Angriff:</span><span>${pokemon.stats.attack}</span></div>
-                <div class="stat"><span>Verteidigung:</span><span>${pokemon.stats.defense}</span></div>
-                <div class="stat"><span>Initiative:</span><span>${pokemon.stats.speed}</span></div>
+                <div class="stat"><span>KP:</span><span>${pokemon.stats?.hp ?? '-'}</span></div>
+                <div class="stat"><span>Angriff:</span><span>${pokemon.stats?.attack ?? '-'}</span></div>
+                <div class="stat"><span>Verteidigung:</span><span>${pokemon.stats?.defense ?? '-'}</span></div>
+                <div class="stat"><span>Initiative:</span><span>${pokemon.stats?.speed ?? '-'}</span></div>
             </div>
-            <div>Größe: ${pokemon.height / 10} m &nbsp; Gewicht: ${pokemon.weight / 10} kg</div>
-            <div>Fähigkeiten: ${pokemon.abilities.join(', ')}</div>
+            <div>Größe: ${pokemon.height ? pokemon.height / 10 + ' m' : '-' } &nbsp; Gewicht: ${pokemon.weight ? pokemon.weight / 10 + ' kg' : '-'}</div>
+            <div>Fähigkeiten: ${abilities}</div>
         </div>
     `;
 }
