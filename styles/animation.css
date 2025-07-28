@@ -1,0 +1,39 @@
+@keyframes flyToArena {
+  0% {
+    transform: translate(0, 0) scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  60% {
+    transform: translate(40vw, -50vh) scale(1.2) rotate(180deg);
+    opacity: 1;
+  }
+  80% {
+    transform: translate(48vw, -10vh) scale(1.1) rotate(270deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(50vw, 0vh) scale(1) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes pokemonAppear {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+@keyframes pokeballRoll {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
