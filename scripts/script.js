@@ -1,5 +1,6 @@
 let allPokemon = [];
 let currentPokemon = null;
+let currentOffset = 150;
 let backgroundAudio = null;
 const API_BASE_URL = 'https://pokeapi.co/api/v2';
 
@@ -15,16 +16,11 @@ class PokemonAPI {
             console.log('Lade Pokemon Liste...');
             const response = await fetch(`${API_BASE_URL}/pokemon?limit=${limit}&offset=${offset}`);
             const data = await response.json();
-            
-            // Detaillierte Daten für jedes Pokemon laden
             const pokemonPromises = data.results.map(async (pokemon, index) => {
                 return await this.loadPokemonDetails(pokemon.url, index + offset + 1);
             });
-            
-            allPokemon = await Promise.all(pokemonPromises);
-            console.log('Pokemon erfolgreich geladen:', allPokemon);
-            return allPokemon;
-            
+            // Nur zurückgeben, NICHT allPokemon überschreiben!
+            return await Promise.all(pokemonPromises);
         } catch (error) {
             console.error('Fehler beim Laden der Pokemon:', error);
             return [];
@@ -109,6 +105,7 @@ function showLoadingAnimation() {
         loadingScreen.style.display = 'flex';
     }
 }
+
 /**
  *  * Versteckt die Ladeanimation und zeigt die Haupt-App an
  */
@@ -212,29 +209,26 @@ function animatePokeballToArena(callback) {
 }
 
 /**
- *  
+ *   Startet die große Animation und zeigt das Pokemon in der Arena an
  */
 async function initializePokedex() {
     showLoadingAnimation();
-    
     try {
-        await PokemonAPI.loadPokemonList(150); // Erste Generation
+        // Beim ersten Laden: allPokemon setzen!
+        allPokemon = await PokemonAPI.loadPokemonList(150);
         hideLoadingAnimation();
         console.log('Pokedex erfolgreich initialisiert!');
-        
-        // Pokemon Karten anzeigen
         displayPokemonCards();
-        
-        // Event Listeners für Interaktionen
         setupEventListeners();
-        
     } catch (error) {
         console.error('Fehler bei der Initialisierung:', error);
         hideLoadingAnimation();
     }
 }
 
-// Event Listeners für UI-Interaktionen
+/**
+ *  Initialisiert die Event Listener für die Benutzeroberfläche
+ */
 function setupEventListeners() {
     // Suchfunktion
     const searchInput = document.getElementById('pokemon-search');
@@ -266,7 +260,9 @@ function setupEventListeners() {
     });
 }
 
-// Suchfunktion
+/**
+ *  Handhabt die Suchanfragen für Pokemon
+ */
 function handleSearch() {
     const searchInput = document.getElementById('pokemon-search');
     if (!searchInput) return;
@@ -280,7 +276,9 @@ function handleSearch() {
     }
 }
 
-// Filter Pokemon nach Typ
+/**
+ *  Filtert die Pokemon nach Typ
+ */
 function filterPokemonByType(type) {
     if (type === 'all') {
         displayPokemonCards();
@@ -292,7 +290,9 @@ function filterPokemonByType(type) {
     }
 }
 
-// Pokemon Karten anzeigen (wird in template.js implementiert)
+/**
+ *  Zeigt die Pokemon Karten an
+ */
 function displayPokemonCards(pokemonList = allPokemon) {
     const selectionSection = document.querySelector('.pokemon-selection');
     if (!selectionSection) return;
@@ -308,9 +308,9 @@ function displayPokemonCards(pokemonList = allPokemon) {
     addPokeCard(pokemonList = allPokemon)
 }
 
-
-
-
+/**
+ *  Blendet das ausgewählte Pokemon wieder aus und zeigt die Auswahl an
+ */
 function backToBall() {
     const selectedPokemon = document.getElementById('selected-pokemon');
     if (selectedPokemon) {
@@ -331,6 +331,41 @@ function backToBall() {
             }
         }, 1000);
     }
+}
+
+async function loadMorePokemonFromAPI() {
+    showLoadingAnimation();
+
+    try {
+        // Weitere 50 Pokémon laden
+        const newPokemon = await PokemonAPI.loadPokemonList(50, currentOffset);
+
+        // Nur gültige Pokémon hinzufügen
+        allPokemon = [...allPokemon, ...newPokemon.filter(p => p)];
+
+        // Offset erhöhen für nächsten Ladevorgang
+        currentOffset += 50;
+
+        // Karten neu anzeigen
+        displayPokemonCards(allPokemon);
+    } catch (error) {
+        console.error('Fehler beim Nachladen weiterer Pokémon:', error);
+    } finally {
+        hideLoadingAnimation();
+    }
+}
+
+/**
+ *  Aktiviert den Hintergrundsound bei Benutzerinteraktionen
+ */
+function enableBackgroundSoundOnUserAction() {
+    function startSound() {
+        playBackgroundSound();
+        document.removeEventListener('touchstart', startSound);
+        document.removeEventListener('click', startSound);
+    }
+    document.addEventListener('touchstart', startSound, { once: true });
+    document.addEventListener('click', startSound, { once: true });
 }
 
 document.addEventListener('DOMContentLoaded', () => {

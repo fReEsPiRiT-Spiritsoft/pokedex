@@ -16,7 +16,7 @@
     <link rel="icon" href="./icons/fav.ico" type="image/x-icon">
 </head>
 
-<body onload="playBackgroundSound();">
+<body onload="enableBackgroundSoundOnUserAction();">
     <!-- Ladescreen mit Pokeball Animation -->
     <div id="loading-screen" class="loading-screen">
         <div class="pokeball-loader">
@@ -41,7 +41,7 @@
                     <!-- Fallback für Browser ohne Video Support -->
                 </video>
 
-                <!-- Statisches Arena Bild (wird nach Video angezeigt) -->
+                <!-- statisches arena bild (wird nach Video angezeigt) -->
                 <img id="arena-background" class="arena-background hidden" src="./img/arena.png" alt="Pokemon Arena">
                 <div id="open-selection-btn" class="open-selection-btn">
                     <img src="./img/ball-pokemon-unscreen.gif" alt="Pokeball auswählen" />
@@ -77,9 +77,10 @@
                     <button id="card-view-btn" class="switch-btn">Kartenansicht →</button>
                     
                 </div>
-
+                <input type="range" id="volumeMusik" name="volume" min="0" max="11" />
+                    <label for="volume">Musik Volume</label>
                 <input type="range" id="volume" name="volume" min="0" max="11" />
-                    <label for="volume">Volume</label>
+                    <label for="volume">SFX Volume</label>
 
                 <!-- Overlay für Kartenansicht -->
                 <div id="card-overlay" class="card-overlay hidden">
@@ -111,13 +112,14 @@
 
             <!-- Pokemon Karten Grid -->
             <div id="pokemon-cards" class="pokemon-cards">
-                <!-- Karten werden hier dynamisch eingefügt -->
+                <!-- kaarten werden hier dynamisch eingefügt -->
+                
             </div>
 
             <!-- Lade-mehr Button -->
-            <div class="load-more-container">
-                <button id="load-more" class="load-more-btn hidden">Mehr Pokémon laden</button>
-            </div>
+            <!-- <div class="load-more-container">
+                <button id="load-more" class="load-more-btn">Mehr Pokémon laden</button>
+            </div> -->
         </section>
     </div>
 
