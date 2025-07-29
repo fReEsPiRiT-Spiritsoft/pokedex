@@ -333,6 +333,12 @@ function backToBall() {
     }
 }
 
+function showFilterBTN() {
+    const filterBtn = document.getElementById('show-filter-btn');
+    const filterContainer = document.querySelector('div.filter-btn-group'); // Der Container!
+    filterContainer.classList.toggle('hidden');
+}
+
 async function loadMorePokemonFromAPI() {
     showLoadingAnimation();
 
