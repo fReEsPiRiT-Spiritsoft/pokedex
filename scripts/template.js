@@ -69,31 +69,9 @@ function getGermanTypeName(englishType) {
     return typeTranslations[englishType] || englishType;
 }
 
-// /**
-//  *  Fügt eine Pokemon-Karte zum Grid hinzu
-//  */
-// function addPokeCard(pokemonList = allPokemon) {
-//     grid.innerHTML = '';
-//     pokemonList.forEach(pokemon => {
-//         const card = document.createElement('div');
-//         card.className = 'pokemon-card';
-//         card.innerHTML = `
-//             <img src="${pokemon.sprites.official || pokemon.sprites.front}" alt="${pokemon.germanName}" style="width:100px;height:100px;">
-//             <h3>${pokemon.germanName}</h3>
-//             <div>${pokemon.types.map(t => `<span>${getGermanTypeName(t)}</span>`).join(' ')}</div>
-//         `;
-//         card.onclick = () => selectPokemon(pokemon);
-//         grid.appendChild(card);
-//     });
-//     loadMorePokemonTemplate();
-// }
-
 function loadMorePokemonTemplate() {
-    // Grid-Element holen!
     const grid = document.getElementById('pokemon-cards');
     if (!grid) return;
-
-    // "Mehr laden"-Karte am Ende einfügen
     const moreCard = document.createElement('div');
     moreCard.className = 'pokemon-card load-more-card';
     moreCard.innerHTML = `
