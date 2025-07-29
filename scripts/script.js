@@ -19,7 +19,6 @@ class PokemonAPI {
             const pokemonPromises = data.results.map(async (pokemon, index) => {
                 return await this.loadPokemonDetails(pokemon.url, index + offset + 1);
             });
-            // Nur zurückgeben, NICHT allPokemon überschreiben!
             return await Promise.all(pokemonPromises);
         } catch (error) {
             console.error('Fehler beim Laden der Pokemon:', error);
@@ -128,14 +127,11 @@ function initializeArena() {
     const arenaVideo = document.getElementById('arena-video');
     const arenaBackground = document.getElementById('arena-background');    
     if (arenaVideo) {
-        // Video sofort starten
         arenaVideo.play().catch(error => {
             console.log('Autoplay nicht möglich, zeige PNG direkt:', error);
             handleArenaVideoEnd();
         });
-        // Event Listener für Video-Ende
         arenaVideo.addEventListener('ended', handleArenaVideoEnd); 
-        //Wenn Video nicht lädt, nach 3 Sekunden PNG zeigen
         setTimeout(() => {
             if (arenaVideo.currentTime === 0) {
                 console.log('Video lädt nicht, zeige PNG');
@@ -153,16 +149,13 @@ function handleArenaVideoEnd() {
     const arenaBackground = document.getElementById('arena-background');
     console.log('🎬 Arena Video beendet - Wechsel zu PNG');
     if (arenaVideo && arenaBackground) {
-        // weciher Übergang von Video zu PNG
         arenaVideo.style.opacity = '0';
         arenaVideo.style.transition = 'opacity 0.5s ease-in-out';
-        // PNG nach kurzer Verzögerung einblenden
         setTimeout(() => {
             arenaVideo.style.display = 'none';
             arenaBackground.classList.remove('hidden');
             arenaBackground.style.opacity = '0';
             arenaBackground.style.transition = 'opacity 1.5s ease-out';
-            // PNG einblenden
             requestAnimationFrame(() => {
                 arenaBackground.style.opacity = '1';
             });
@@ -177,14 +170,11 @@ function handleArenaVideoEnd() {
 function selectPokemon(pokemonData) {
     currentPokemon = pokemonData;
     console.log(`🎯 Pokemon ausgewählt: ${pokemonData.germanName}`);
-     // Modal ausblenden
     const selection = document.querySelector('.pokemon-selection');
     if (selection) {
         selection.classList.remove('active');
     }
-    // Pokeball Animation zur Arena
     animatePokeballToArena(() => {
-        // Pokemon in Arena anzeigen
         displayPokemonInArena(pokemonData);
     });
 }
@@ -198,7 +188,6 @@ function animatePokeballToArena(callback) {
         playPokeballSound()
         pokeballAnimation.classList.remove('hidden');
         pokeballAnimation.style.animation = 'flyToArena 2s ease-in-out forwards';
-        // Nach Animation: Pokemon anzeigen
         setTimeout(() => {
             pokeballAnimation.classList.add('hidden');
             if (callback) callback();
@@ -227,33 +216,39 @@ async function initializePokedex() {
 }
 
 /**
- *  Initialisiert die Event Listener für die Benutzeroberfläche
+ *  Initialisiert alle Event Listener
  */
 function setupEventListeners() {
-    // Suchfunktion
+    setupSearchListeners();
+    setupFilterListeners();
+}
+
+/**
+ *  Initialisiert die Event Listener für die Suchfunktion
+ */
+function setupSearchListeners() {
     const searchInput = document.getElementById('pokemon-search');
     const searchBtn = document.getElementById('search-btn');
-    
     if (searchInput) {
         searchInput.addEventListener('input', handleSearch);
         searchInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') handleSearch();
         });
     }
-    
     if (searchBtn) {
         searchBtn.addEventListener('click', handleSearch);
     }
-    
-    // Type Filter Buttons
-    const filterButtons = document.querySelectorAll('.filter-btn');
+}
+
+/**
+ *  Initialisiert die Event Listener für die Filter-Buttons
+ */
+function setupFilterListeners() {
+    const filterButtons = document.querySelectorAll('.filter-btn'); 
     filterButtons.forEach(btn => {
         btn.addEventListener('click', () => {
-            // Aktiven Button ändern
             filterButtons.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            
-            // Filter anwenden
             const filterType = btn.dataset.type;
             filterPokemonByType(filterType);
         });
@@ -266,7 +261,6 @@ function setupEventListeners() {
 function handleSearch() {
     const searchInput = document.getElementById('pokemon-search');
     if (!searchInput) return;
-    
     const query = searchInput.value.trim();
     if (query) {
         const searchResults = PokemonAPI.searchPokemon(query);
@@ -309,17 +303,23 @@ function displayPokemonCards(pokemonList = allPokemon) {
 }
 
 /**
- *  Blendet das ausgewählte Pokemon wieder aus und zeigt die Auswahl an
+ * Blendet das ausgewählte Pokemon aus
  */
-function backToBall() {
+function hidePokemon() {
     const selectedPokemon = document.getElementById('selected-pokemon');
     if (selectedPokemon) {
         selectedPokemon.classList.add('hidden');
     }
+}
+
+/**
+ * Animiert den Pokeball zurück zur Auswahl
+ */
+function animatePokeballBack() {
     // Pokeball Animation zurück zur Auswahl
     const pokeballAnimation = document.getElementById('pokeball-animation');
     if (pokeballAnimation) {
-        playPokeballSound()
+        playPokeballSound();
         pokeballAnimation.classList.remove('hidden');
         pokeballAnimation.style.animation = 'flyToSelection 2s ease-in-out forwards';       
         // Nach Animation: Pokeball zurück zur Auswahl
@@ -333,6 +333,14 @@ function backToBall() {
     }
 }
 
+/**
+ * Blendet das ausgewählte Pokemon wieder aus und zeigt die Auswahl an
+ */
+function backToBall() {
+    hidePokemon();
+    animatePokeballBack();
+}
+
 function showFilterBTN() {
     const filterBtn = document.getElementById('show-filter-btn');
     const filterContainer = document.querySelector('div.filter-btn-group'); // Der Container!
@@ -341,18 +349,10 @@ function showFilterBTN() {
 
 async function loadMorePokemonFromAPI() {
     showLoadingAnimation();
-
     try {
-        // Weitere 50 Pokémon laden
         const newPokemon = await PokemonAPI.loadPokemonList(50, currentOffset);
-
-        // Nur gültige Pokémon hinzufügen
         allPokemon = [...allPokemon, ...newPokemon.filter(p => p)];
-
-        // Offset erhöhen für nächsten Ladevorgang
         currentOffset += 50;
-
-        // Karten neu anzeigen
         displayPokemonCards(allPokemon);
     } catch (error) {
         console.error('Fehler beim Nachladen weiterer Pokémon:', error);
