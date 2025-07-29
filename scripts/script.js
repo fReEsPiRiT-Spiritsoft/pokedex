@@ -1,5 +1,6 @@
 let allPokemon = [];
 let currentPokemon = null;
+let backgroundAudio = null;
 const API_BASE_URL = 'https://pokeapi.co/api/v2';
 
 class PokemonAPI {
@@ -190,12 +191,14 @@ function selectPokemon(pokemonData) {
         displayPokemonInArena(pokemonData);
     });
 }
+
 /**
  *  * Animiert den Pokeball zur Arena und zeigt das Pokemon an
  */
 function animatePokeballToArena(callback) {
     const pokeballAnimation = document.getElementById('pokeball-animation');
     if (pokeballAnimation) {
+        playPokeballSound()
         pokeballAnimation.classList.remove('hidden');
         pokeballAnimation.style.animation = 'flyToArena 2s ease-in-out forwards';
         // Nach Animation: Pokemon anzeigen
@@ -207,7 +210,6 @@ function animatePokeballToArena(callback) {
         callback();
     }
 }
-
 
 /**
  *  
@@ -294,8 +296,6 @@ function filterPokemonByType(type) {
 function displayPokemonCards(pokemonList = allPokemon) {
     const selectionSection = document.querySelector('.pokemon-selection');
     if (!selectionSection) return;
-
-    // Vorherige Karten entfernen
     let grid = document.getElementById('pokemon-cards-grid');
     if (!grid) {
         grid = document.createElement('div');
@@ -305,34 +305,23 @@ function displayPokemonCards(pokemonList = allPokemon) {
         grid.style.gap = '20px';
         selectionSection.appendChild(grid);
     }
-    grid.innerHTML = '';
-
-    // Karten hinzufügen
-    pokemonList.forEach(pokemon => {
-        const card = document.createElement('div');
-        card.className = 'pokemon-card';
-        card.innerHTML = `
-            <img src="${pokemon.sprites.official || pokemon.sprites.front}" alt="${pokemon.germanName}" style="width:100px;height:100px;">
-            <h3>${pokemon.germanName}</h3>
-            <div>${pokemon.types.map(t => `<span>${getGermanTypeName(t)}</span>`).join(' ')}</div>
-        `;
-        card.onclick = () => selectPokemon(pokemon);
-        grid.appendChild(card);
-    });
+    addPokeCard(pokemonList = allPokemon)
 }
+
+
+
 
 function backToBall() {
     const selectedPokemon = document.getElementById('selected-pokemon');
     if (selectedPokemon) {
         selectedPokemon.classList.add('hidden');
     }
-    
     // Pokeball Animation zurück zur Auswahl
     const pokeballAnimation = document.getElementById('pokeball-animation');
     if (pokeballAnimation) {
+        playPokeballSound()
         pokeballAnimation.classList.remove('hidden');
-        pokeballAnimation.style.animation = 'flyToSelection 2s ease-in-out forwards';
-        
+        pokeballAnimation.style.animation = 'flyToSelection 2s ease-in-out forwards';       
         // Nach Animation: Pokeball zurück zur Auswahl
         setTimeout(() => {
             pokeballAnimation.classList.add('hidden');
@@ -343,7 +332,6 @@ function backToBall() {
         }, 1000);
     }
 }
-
 
 document.addEventListener('DOMContentLoaded', () => {
     const openBtn = document.getElementById('open-selection-btn');

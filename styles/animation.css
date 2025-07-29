@@ -29,11 +29,36 @@
 }
 
 @keyframes pokeballRoll {
+  
   0% {
     transform: rotate(0deg);
   }
 
   100% {
     transform: rotate(360deg);
+  }
+}
+
+/* Pokeball fliegt zum Pokémon und kommt zurück */
+@keyframes flyToSelection {
+  0% {
+    left: 50%;
+    top: 80%;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  30% {
+    left: var(--pokemon-x, 60%);
+    top: var(--pokemon-y, 40%);
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+  60% {
+    left: var(--pokemon-x, 60%);
+    top: var(--pokemon-y, 40%);
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+  100% { 
+    left: var(--start-x, 10%);
+    top: var(--start-y, 80%);
+    transform: translate(-50%, -50%) scale(1);
   }
 }

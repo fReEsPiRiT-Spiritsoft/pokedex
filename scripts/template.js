@@ -69,3 +69,52 @@ function getGermanTypeName(englishType) {
     };    
     return typeTranslations[englishType] || englishType;
 }
+
+function addPokeCard(pokemonList = allPokemon) {
+    grid.innerHTML = '';
+    pokemonList.forEach(pokemon => {
+        const card = document.createElement('div');
+        card.className = 'pokemon-card';
+        card.innerHTML = `
+            <img src="${pokemon.sprites.official || pokemon.sprites.front}" alt="${pokemon.germanName}" style="width:100px;height:100px;">
+            <h3>${pokemon.germanName}</h3>
+            <div>${pokemon.types.map(t => `<span>${getGermanTypeName(t)}</span>`).join(' ')}</div>
+        `;
+        card.onclick = () => selectPokemon(pokemon);
+        grid.appendChild(card);
+    });
+}
+
+function playPokeballSound() {
+    const audio = new Audio('./sounds/pokeball.mp3');
+    // Lautstärke aus dem Regler holen (Wert von 0 bis 11, umrechnen auf 0 bis 1)
+    const volumeSlider = document.getElementById('volume');
+    let volume = 0.7; // Default
+    if (volumeSlider) {
+        volume = Math.max(0, Math.min(1, volumeSlider.value / 11));
+    }
+    audio.volume = volume;
+    audio.play();
+}
+
+function playBackgroundSound() {
+    if (!backgroundAudio) {
+        backgroundAudio = new Audio('./sounds/backgroundmusik.mp3');
+        backgroundAudio.loop = true;
+    }
+    const volumeSlider = document.getElementById('volume');
+    let volume = 0.7;
+    if (volumeSlider) {
+        volume = Math.max(0, Math.min(1, volumeSlider.value / 11));
+    }
+    backgroundAudio.volume = volume;
+    backgroundAudio.play();
+}
+
+// Lautstärke bei Änderung des Sliders anpassen
+document.getElementById('volume').addEventListener('input', function() {
+    if (backgroundAudio) {
+        let volume = Math.max(0, Math.min(1, this.value / 11));
+        backgroundAudio.volume = volume;
+    }
+});

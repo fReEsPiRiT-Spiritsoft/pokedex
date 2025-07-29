@@ -1,4 +1,4 @@
-/* Pokedex Arena - Vollbild Design ohne Scrollbalken */
+
 :root {
   --primary: #ffcb05;
   --secondary: #3d7dca;
@@ -13,14 +13,14 @@
   --glow: 0 0 20px rgba(255, 203, 5, 0.5);
 }
 
-/* Reset und Vollbild-Setup */
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* Explizite Resets für problematische Elemente */
+
 html,
 body,
 video,
@@ -36,13 +36,11 @@ body {
   height: 100vh;
   width: 100vw;
   overflow: hidden;
-  /* Keine Scrollbalken */
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: var(--bg-dark);
   color: var(--text-light);
 }
 
-/* Spezielle Resets für Video und IMG */
 video,
 img {
   display: block;
@@ -50,7 +48,7 @@ img {
   height: 160px;
 }
 
-/* Ladescreen mit Pokeball Animation */
+
 .loading-screen {
   position: fixed;
   top: 0;
@@ -128,7 +126,7 @@ img {
 
 
 
-/* Haupt-App Container */
+
 .main-app {
   position: relative;
   width: 100vw;
@@ -140,7 +138,7 @@ img {
   display: none !important;
 }
 
-/* Pokemon Arena - Vollbild Background */
+
 .pokemon-arena {
   position: absolute;
   top: 0;
@@ -292,7 +290,7 @@ img {
   font-weight: bold;
 }
 
-/* Pokeball Animation */
+
 .pokeball-animation {
   position: absolute;
   bottom: 10%;
@@ -306,7 +304,7 @@ img {
   filter: drop-shadow(0 0 15px rgba(255, 23, 68, 0.8));
 }
 
-/* Switch */
+
 .view-switch {
   display: flex;
   justify-content: center;
@@ -336,7 +334,6 @@ img {
   color: var(--text-light);
 }
 
-/* Overlay */
 .card-overlay {
   position: fixed;
   top: 0;
@@ -405,7 +402,6 @@ img {
   color: #fff;
 }
 
-/* Pokemon Karten Auswahl - Overlay */
 .pokemon-selection {
   position: absolute;
   bottom: 0;
@@ -473,7 +469,7 @@ img {
   box-shadow: var(--glow);
 }
 
-/* Filter Buttons */
+
 .filter-container {
   display: flex;
   justify-content: center;
@@ -501,7 +497,7 @@ img {
   box-shadow: var(--glow);
 }
 
-/* Pokemon Karten Grid */
+
 .pokemon-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -511,7 +507,7 @@ img {
   padding-right: 10px;
 }
 
-/* Custom Scrollbar */
+
 .pokemon-cards::-webkit-scrollbar {
   width: 8px;
 }
@@ -530,7 +526,7 @@ img {
   background: #ffd54f;
 }
 
-/* Pokemon Karte */
+
 .pokemon-card {
   background: rgba(255, 255, 255, 0);
   border-radius: 15px;
@@ -556,7 +552,6 @@ img {
   z-index: 10;
   background: inherit;
   order: -1;
-  /* Immer ganz oben */
 }
 
 .pokemon-card:hover {
@@ -619,7 +614,7 @@ img {
   font-style: italic;
 }
 
-/* Responsive Design */
+
 @media (max-width: 768px) {
   .pokemon-selection {
     height: 60vh;
@@ -829,35 +824,29 @@ img {
     right: 8px;
   }
 
-  /* Stelle sicher, dass das Overlay-Content relativ positioniert ist */
+
   #card-overlay-content {
     position: relative;
   }
     .pokemon-selection.active {
-    position: fixed; /* statt absolute */
-    top: 0;          /* statt nur bottom: 0 */
-    height: 100vh;   /* volle Bildschirmhöhe */
+    position: fixed; 
+    top: 0;          
+    height: 100vh;   
     width: 100%;
-    z-index: 999;    /* über allem anderen */
-    padding-top: 60px !important; /* Platz für Header */
+    z-index: 999;    
+    padding-top: 60px !important; 
     margin: 0 !important;
-    background: rgba(26, 26, 46, 0.98); /* dunklerer Hintergrund für bessere Lesbarkeit */
+    background: rgba(26, 26, 46, 0.98); 
     overflow-y: auto;
   }
   
-  /*Mehr Platz für die Karten
-  .pokemon-cards {
-    max-height: calc(100vh - 250px);
-    margin-bottom: 40px;
-  }
-  
-  /* Header kleiner machen für mehr Kartenplatz */
+ 
   .selection-header h1 {
     font-size: 1.6rem;
     margin-bottom: 10px;
   }
   
-  /* Zurück-Button deutlicher gestalten */
+ /
   .switch-btn#arena-view-btn {
     background: var(--secondary);
     color: white;

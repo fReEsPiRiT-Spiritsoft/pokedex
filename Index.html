@@ -16,7 +16,7 @@
     <link rel="icon" href="./icons/fav.ico" type="image/x-icon">
 </head>
 
-<body>
+<body onload="playBackgroundSound();">
     <!-- Ladescreen mit Pokeball Animation -->
     <div id="loading-screen" class="loading-screen">
         <div class="pokeball-loader">
@@ -68,22 +68,26 @@
 
         <!-- Pokemon Karten Auswahl -->
 
-        
+
         <section id="pokemon-selection" class="pokemon-selection">
             <div class="selection-header">
                 <div class="view-switch">
-            <button id="arena-view-btn" class="switch-btn active">← Arena</button>
-            <span class="switch-label">Ansicht wechseln</span>
-            <button id="card-view-btn" class="switch-btn">Kartenansicht →</button>
-        </div>
+                    <button id="arena-view-btn" class="switch-btn active">← Arena</button>
+                    <span class="switch-label">Ansicht wechseln</span>
+                    <button id="card-view-btn" class="switch-btn">Kartenansicht →</button>
+                    
+                </div>
 
-        <!-- Overlay für Kartenansicht -->
-        <div id="card-overlay" class="card-overlay hidden">
-            <button id="prev-pokemon" class="nav-btn">←</button>
-            <div id="card-overlay-content"></div>
-            <button id="next-pokemon" class="nav-btn">→</button>
-            <button id="close-card-overlay" class="close-btn">✖</button>
-        </div>
+                <input type="range" id="volume" name="volume" min="0" max="11" />
+                    <label for="volume">Volume</label>
+
+                <!-- Overlay für Kartenansicht -->
+                <div id="card-overlay" class="card-overlay hidden">
+                    <button id="prev-pokemon" class="nav-btn">←</button>
+                    <div id="card-overlay-content"></div>
+                    <button id="next-pokemon" class="nav-btn">→</button>
+                    <button id="close-card-overlay" class="close-btn">✖</button>
+                </div>
                 <h1>Wähle dein Pokémon</h1>
                 <div class="search-container">
                     <input type="text" id="pokemon-search" placeholder="Pokémon suchen..." class="search-input">

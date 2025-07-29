@@ -59,6 +59,8 @@ function openCardOverlay(pokemonList, idx) {
     };
 }
 
+
+
 function renderCardOverlayContent(pokemon) {
     console.log('Overlay-Pokemon:', pokemon);
     const content = document.getElementById('card-overlay-content');
