@@ -17,85 +17,82 @@ document.getElementById('card-view-btn').onclick = () => {
 };
 
 /**
- *  Zeigt die Pokemon-Karten an
+ *  creates a Pokemon card element
+ * @param {Object} pokemon - Pokemon data object
+ * @param {number} idx - Index of the Pokemon in the list
+ * @param {Array} pokemonList - List of all Pokemon
+ */
+function createPokemonCard(pokemon, idx, pokemonList) {
+    const card = document.createElement('div');
+    card.className = 'pokemon-card';
+    card.innerHTML = getPokemonCardHTML(pokemon);
+    card.onclick = () => {
+        if (viewMode === 'arena') {
+            selectPokemon(pokemon);
+        } else {
+            currentCardIndex = idx;
+            openCardOverlay(pokemonList, idx);
+        }
+    };
+    return card;
+}
+
+/**shows the Pokemon cards in the grid
+ * @param {Array} pokemonList - List of Pokemon to display
+ * If not provided, uses the global `allPokemon` array
+ * If `allPokemon` is empty, it will fetch the Pokemon from the API
+ * and display them
  */
 function displayPokemonCards(pokemonList = allPokemon) {
     const grid = document.getElementById('pokemon-cards');
     if (!grid) return;
     grid.innerHTML = '';
     pokemonList.forEach((pokemon, idx) => {
-        const card = document.createElement('div');
-        card.className = 'pokemon-card';
-        card.innerHTML = `
-            <img src="${pokemon.sprites.official || pokemon.sprites.front}" alt="${pokemon.germanName}" style="width:100px;height:100px;">
-            <h3>${pokemon.germanName}</h3>
-            <div>${pokemon.types.map(t => `<span>${getGermanTypeName(t)}</span>`).join(' ')}</div>
-        `;
-        card.onclick = () => {
-            if (viewMode === 'arena') {
-                selectPokemon(pokemon);
-            } else {
-                currentCardIndex = idx;
-                openCardOverlay(pokemonList, idx);
-            }
-        };
+        const card = createPokemonCard(pokemon, idx, pokemonList);
         grid.appendChild(card);
-        
     });
-    loadMorePokemonTemplate()
+    loadMorePokemonTemplate();
 }
 
 /**
  *  Öffnet das Overlay für die Pokemon-Karte
  */
 function openCardOverlay(pokemonList, idx) {
-    playCardSwitchSound()
+    playCardSwitchSound();
     const overlay = document.getElementById('card-overlay');
-    const content = document.getElementById('card-overlay-content');
     overlay.classList.remove('hidden');
-    renderCardOverlayContent(pokemonList[idx]);
-    document.getElementById('prev-pokemon').onclick = () => {
-        currentCardIndex = (currentCardIndex - 1 + pokemonList.length) % pokemonList.length;
-        renderCardOverlayContent(pokemonList[currentCardIndex]);
-        playCardSwitchSound()
-    };
-    document.getElementById('next-pokemon').onclick = () => {
-        currentCardIndex = (currentCardIndex + 1) % pokemonList.length;
-        renderCardOverlayContent(pokemonList[currentCardIndex]);
-        playCardSwitchSound()
-    };
-    document.getElementById('close-card-overlay').onclick = () => {
-        overlay.classList.add('hidden');
-    };
+    currentCardIndex = idx;
+    renderCardOverlayContent(pokemonList[currentCardIndex]);
+    setupCardOverlayNavigation(pokemonList);
 }
 
-/**
- *  Rendert den Inhalt des Karten-Overlays für ein Pokemon
- */
+function setupCardOverlayNavigation(pokemonList) {
+    document.getElementById('prev-pokemon').onclick = () => prevPokemon(pokemonList);
+    document.getElementById('next-pokemon').onclick = () => nextPokemon(pokemonList);
+    document.getElementById('close-card-overlay').onclick = closeCardOverlay;
+}
+
+function prevPokemon(pokemonList) {
+    currentCardIndex = (currentCardIndex - 1 + pokemonList.length) % pokemonList.length;
+    renderCardOverlayContent(pokemonList[currentCardIndex]);
+    playCardSwitchSound();
+}
+
+function nextPokemon(pokemonList) {
+    currentCardIndex = (currentCardIndex + 1) % pokemonList.length;
+    renderCardOverlayContent(pokemonList[currentCardIndex]);
+    playCardSwitchSound();
+}
+
+function closeCardOverlay() {
+    document.getElementById('card-overlay').classList.add('hidden');
+}
+
 function renderCardOverlayContent(pokemon) {
-    console.log('Overlay-Pokemon:', pokemon);
     const content = document.getElementById('card-overlay-content');
     content.className = 'card-overlay-content';
     if (pokemon.types && pokemon.types.length > 0) {
         content.classList.add('type-' + pokemon.types[0]);
     }
-    const name = pokemon.germanName || pokemon.name || 'Unbekannt';
-    const abilities = Array.isArray(pokemon.abilities) && pokemon.abilities.length > 0
-        ? pokemon.abilities.join(', ')
-        : 'Keine Fähigkeiten gefunden';
-    content.innerHTML = `
-        <div class="pokemon-card large">
-            <img src="${pokemon.sprites.official || pokemon.sprites.front}" alt="${name}" style="width:180px;height:180px;">
-            <h2>${name}</h2>
-            <div>${pokemon.types.map(t => `<span class="type type-${t}">${getGermanTypeName(t)}</span>`).join(' ')}</div>
-            <div class="pokemon-stats">
-                <div class="stat"><span>KP:</span><span>${pokemon.stats?.hp ?? '-'}</span></div>
-                <div class="stat"><span>Angriff:</span><span>${pokemon.stats?.attack ?? '-'}</span></div>
-                <div class="stat"><span>Verteidigung:</span><span>${pokemon.stats?.defense ?? '-'}</span></div>
-                <div class="stat"><span>Initiative:</span><span>${pokemon.stats?.speed ?? '-'}</span></div>
-            </div>
-            <div>Größe: ${pokemon.height ? pokemon.height / 10 + ' m' : '-' } &nbsp; Gewicht: ${pokemon.weight ? pokemon.weight / 10 + ' kg' : '-'}</div>
-            <div>Fähigkeiten: ${abilities}</div>
-        </div>
-    `;
+    content.innerHTML = getCardOverlayHTML(pokemon);
 }

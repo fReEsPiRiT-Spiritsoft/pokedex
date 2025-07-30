@@ -13,7 +13,6 @@ class PokemonAPI {
      */
     static async loadPokemonList(limit = 150, offset = 0) {
         try {
-            console.log('Lade Pokemon Liste...');
             const response = await fetch(`${API_BASE_URL}/pokemon?limit=${limit}&offset=${offset}`);
             const data = await response.json();
             const pokemonPromises = data.results.map(async (pokemon, index) => {
@@ -21,7 +20,6 @@ class PokemonAPI {
             });
             return await Promise.all(pokemonPromises);
         } catch (error) {
-            console.error('Fehler beim Laden der Pokemon:', error);
             return [];
         }
     }
@@ -57,7 +55,6 @@ class PokemonAPI {
             };
             
         } catch (error) {
-            console.error(`Fehler beim Laden von Pokemon ${id}:`, error);
             return null;
         }
     }
@@ -75,7 +72,6 @@ class PokemonAPI {
             return germanName ? germanName.name : species.name;
             
         } catch (error) {
-            console.error('Fehler beim Laden des deutschen Namens:', error);
             return 'Unbekannt';
         }
     }
@@ -98,7 +94,6 @@ class PokemonAPI {
  * Zeigt das ausgewählte Pokemon in der Arena an
  */
 function showLoadingAnimation() {
-    console.log('🔴 Pokeball rollt... Lade Pokemon Daten...');
     const loadingScreen = document.getElementById('loading-screen');
     if (loadingScreen) {
         loadingScreen.style.display = 'flex';
@@ -109,7 +104,6 @@ function showLoadingAnimation() {
  *  * Versteckt  ladeanimation und zeigt die Haupt-App an
  */
 function hideLoadingAnimation() {
-    console.log('✅ Pokemon Daten geladen!');
     const loadingScreen = document.getElementById('loading-screen');
     const mainApp = document.getElementById('main-app');   
     if (loadingScreen && mainApp) {
@@ -128,13 +122,11 @@ function initializeArena() {
     const arenaBackground = document.getElementById('arena-background');    
     if (arenaVideo) {
         arenaVideo.play().catch(error => {
-            console.log('Autoplay nicht möglich, zeige PNG direkt:', error);
             handleArenaVideoEnd();
         });
         arenaVideo.addEventListener('ended', handleArenaVideoEnd); 
         setTimeout(() => {
             if (arenaVideo.currentTime === 0) {
-                console.log('Video lädt nicht, zeige PNG');
                 handleArenaVideoEnd();
             }
         }, 3000);
@@ -147,7 +139,6 @@ function initializeArena() {
 function handleArenaVideoEnd() {
     const arenaVideo = document.getElementById('arena-video');
     const arenaBackground = document.getElementById('arena-background');
-    console.log('🎬 Arena Video beendet - Wechsel zu PNG');
     if (arenaVideo && arenaBackground) {
         arenaVideo.style.opacity = '0';
         arenaVideo.style.transition = 'opacity 0.5s ease-in-out';
@@ -159,7 +150,6 @@ function handleArenaVideoEnd() {
             requestAnimationFrame(() => {
                 arenaBackground.style.opacity = '1';
             });
-            console.log('✅ Arena bereit für Pokemon Auswahl!');
         }, 100);
     }
 }
@@ -169,7 +159,6 @@ function handleArenaVideoEnd() {
  */
 function selectPokemon(pokemonData) {
     currentPokemon = pokemonData;
-    console.log(`🎯 Pokemon ausgewählt: ${pokemonData.germanName}`);
     const selection = document.querySelector('.pokemon-selection');
     if (selection) {
         selection.classList.remove('active');
@@ -206,11 +195,9 @@ async function initializePokedex() {
         // Beim ersten Laden: allPokemon setzen!
         allPokemon = await PokemonAPI.loadPokemonList(150);
         hideLoadingAnimation();
-        console.log('Pokedex erfolgreich initialisiert!');
         displayPokemonCards();
         setupEventListeners();
     } catch (error) {
-        console.error('Fehler bei der Initialisierung:', error);
         hideLoadingAnimation();
     }
 }
@@ -316,18 +303,16 @@ function hidePokemon() {
  * Animiert den Pokeball zurück zur Auswahl
  */
 function animatePokeballBack() {
-    // Pokeball Animation zurück zur Auswahl
     const pokeballAnimation = document.getElementById('pokeball-animation');
     if (pokeballAnimation) {
         playPokeballSound();
         pokeballAnimation.classList.remove('hidden');
         pokeballAnimation.style.animation = 'flyToSelection 2s ease-in-out forwards';       
-        // Nach Animation: Pokeball zurück zur Auswahl
         setTimeout(() => {
             pokeballAnimation.classList.add('hidden');
             const openBtn = document.getElementById('open-selection-btn');
             if (openBtn) {
-                openBtn.style.display = 'block'; // Pokeball-Button wieder anzeigen
+                openBtn.style.display = 'block';
             }
         }, 1000);
     }
@@ -355,9 +340,30 @@ async function loadMorePokemonFromAPI() {
         currentOffset += 50;
         displayPokemonCards(allPokemon);
     } catch (error) {
-        console.error('Fehler beim Nachladen weiterer Pokémon:', error);
     } finally {
         hideLoadingAnimation();
+    }
+}
+
+function displayPokemonInArena(pokemonData) {
+    const selectedPokemon = document.getElementById('selected-pokemon');
+    const pokemonSprite = document.getElementById('pokemon-sprite');
+    const pokemonName = document.getElementById('pokemon-name');
+    const pokemonTypes = document.getElementById('pokemon-types');
+    const pokemonStats = document.getElementById('pokemon-stats');
+    if (selectedPokemon && pokemonSprite && pokemonName) {
+        const arenaHTML = getPokemonArenaHTML(pokemonData);
+        pokemonSprite.src = arenaHTML.spriteSrc;
+        pokemonSprite.alt = arenaHTML.spriteAlt;
+        pokemonName.textContent = arenaHTML.name;
+        if (pokemonTypes) {
+            pokemonTypes.innerHTML = arenaHTML.typesHTML;
+        }
+        if (pokemonStats) {
+            pokemonStats.innerHTML = arenaHTML.statsHTML;
+        }
+        selectedPokemon.classList.remove('hidden');
+        selectedPokemon.style.animation = 'pokemonAppear 1s ease-in-out forwards';
     }
 }
 
