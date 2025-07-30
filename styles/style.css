@@ -63,6 +63,29 @@ img {
   height: 160px;
 }
 
+.ball-hint-container {
+    position: relative;
+    display: inline-block;
+}
+
+.close-hint {
+    position: absolute;
+    left: -90px; /* Abstand nach links, ggf. anpassen */
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: opacity 0.2s;
+    background: none;
+    color: #ff1744;
+    font-weight: bold;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+#pokemon-info:hover .close-hint {
+    opacity: 1;
+    display: block;
+}
 
 .loading-screen {
   position: fixed;
@@ -130,13 +153,13 @@ img {
 }
 
 .back-to-ball-btn {
-  position: absolute;
-  top: 32px;
-  right: 111px;
-  cursor: pointer;
-  width: 172px !important;
-  height: 61px !important;
-  z-index: 20;
+    position: absolute;
+    top: -26px;
+    right: -53px;
+    cursor: pointer;
+    width: 172px !important;
+    height: 61px !important;
+    z-index: 20;
 }
 
 
@@ -346,6 +369,10 @@ img {
 .switch-label {
   font-size: 1.1rem;
   color: var(--text-light);
+}
+.card-overlay button {
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .card-overlay {

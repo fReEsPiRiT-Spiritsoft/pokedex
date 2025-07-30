@@ -33,7 +33,7 @@
     <!-- Haupt-Container -->
     <div id="main-app" class="main-app hidden">
         <div class="header">
-            <img src="./img/logo.png" alt="">  
+            <img src="./img/logo.png" alt="">
         </div>
         <!-- Pokemon Arena Section -->
         <section id="pokemon-arena" class="pokemon-arena">
@@ -45,19 +45,24 @@
                 </video>
 
                 <!-- statisches arena bild (wird nach Video angezeigt) -->
-                 
+
                 <img id="arena-background" class="arena-background hidden" src="./img/arena.png" alt="Pokemon Arena">
-                
+
                 <div id="open-selection-btn" class="open-selection-btn">
                     <img src="./img/ball-pokemon-unscreen.gif" alt="Pokeball auswählen" />
                 </div>
                 <!-- Ausgewähltes Pokemon in der Arena -->
                 <div id="selected-pokemon" class="selected-pokemon hidden">
 
-                    <div class="pokemon-info">
+                    <div id="pokemon-info" class="pokemon-info">
+                        <div class="ball-hint-container" style="position:relative; display:inline-block;">
+                            <div id="close-hint" class="close-hint" style="display:none;">
+                                <span style="color:#ff1744; font-size:1.5em;">&#8592;</span> Zurück
+                            </div>
+                            <img src="./img/ball-pokemon-unscreen.gif" alt="Pokeball" class="back-to-ball-btn"
+                                onclick="backToBall()">
+                        </div>
                         <h2 id="pokemon-name"></h2>
-                        <img src="./img/ball-pokemon-unscreen.gif" alt="Pokeball" class="back-to-ball-btn"
-                            onclick="backToBall()">
                         <div class="pokemon-types" id="pokemon-types"></div>
                         <div class="pokemon-stats" id="pokemon-stats"></div>
                         <img id="pokemon-sprite" class="pokemon-sprite" src="" alt="">
@@ -80,12 +85,12 @@
                     <button id="arena-view-btn" class="switch-btn active">← Arena</button>
                     <span class="switch-label">Ansicht wechseln</span>
                     <button id="card-view-btn" class="switch-btn">Kartenansicht →</button>
-                    
+
                 </div>
                 <input type="range" id="volumeMusik" name="volume" min="0" max="11" />
-                    <label for="volume">Musik Volume</label>
+                <label for="volume">Musik Volume</label>
                 <input type="range" id="volume" name="volume" min="0" max="11" />
-                    <label for="volume">SFX Volume</label>
+                <label for="volume">SFX Volume</label>
 
                 <!-- Overlay für Kartenansicht -->
                 <div id="card-overlay" class="card-overlay hidden">
@@ -105,25 +110,29 @@
             <div class="filter-container">
                 <button onclick="showFilterBTN()" class="filter-btn-switch" id="show-filter-btn">Show Filter</button>
                 <div class="filter-btn-group filter-container hidden">
-                <button class="filter-btn active" data-type="all">Alle</button>
-                <button class="filter-btn" data-type="fire">🔥 Feuer</button>
-                <button class="filter-btn" data-type="water">💧 Wasser</button>
-                <button class="filter-btn" data-type="grass">🌿 Pflanze</button>
-                <button class="filter-btn" data-type="electric">⚡ Elektro</button>
-                <button class="filter-btn" data-type="psychic">🔮 Psycho</button>
-                <button class="filter-btn" data-type="ice">❄️ Eis</button>
-                <button class="filter-btn" data-type="dragon">🐉 Drache</button>
-                <button class="filter-btn" data-type="dark">🌚 Unlicht</button>
-                <button class="filter-btn" data-type="fairy">🧚 Fee</button>
+                    <button class="filter-btn active" data-type="all">Alle</button>
+                    <button class="filter-btn" data-type="fire">🔥 Feuer</button>
+                    <button class="filter-btn" data-type="water">💧 Wasser</button>
+                    <button class="filter-btn" data-type="grass">🌿 Pflanze</button>
+                    <button class="filter-btn" data-type="electric">⚡ Elektro</button>
+                    <button class="filter-btn" data-type="psychic">🔮 Psycho</button>
+                    <button class="filter-btn" data-type="ice">❄️ Eis</button>
+                    <button class="filter-btn" data-type="dragon">🐉 Drache</button>
+                    <button class="filter-btn" data-type="dark">🌚 Unlicht</button>
+                    <button class="filter-btn" data-type="fairy">🧚 Fee</button>
                 </div>
             </div>
 
             <!-- Pokemon Karten Grid -->
             <div id="pokemon-cards" class="pokemon-cards">
                 <!-- kaarten werden hier dynamisch eingefügt -->
-                
+
             </div>
 
+            <!-- Lade-mehr Button -->
+            <!-- <div class="load-more-container">
+                <button id="load-more" class="load-more-btn">Mehr Pokémon laden</button>
+            </div> -->
         </section>
     </div>
 
