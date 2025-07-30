@@ -39,7 +39,7 @@
   }
 }
 
-/* Pokeball fliegt zum Pokémon und kommt zurück */
+
 @keyframes flyToSelection {
   0% {
     left: 50%;

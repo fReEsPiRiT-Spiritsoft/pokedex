@@ -106,7 +106,7 @@ function showLoadingAnimation() {
 }
 
 /**
- *  * Versteckt die Ladeanimation und zeigt die Haupt-App an
+ *  * Versteckt  ladeanimation und zeigt die Haupt-App an
  */
 function hideLoadingAnimation() {
     console.log('✅ Pokemon Daten geladen!');
