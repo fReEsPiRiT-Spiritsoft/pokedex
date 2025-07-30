@@ -162,8 +162,10 @@ function selectPokemon(pokemonData) {
     const selection = document.querySelector('.pokemon-selection');
     if (selection) {
         selection.classList.remove('active');
+        selection.style.display = 'none';
     }
-    animatePokeballToArena(() => {
+        document.getElementById('open-selection-btn').style.display = 'none';
+        animatePokeballToArena(() => {
         displayPokemonInArena(pokemonData);
     });
 }
@@ -320,7 +322,11 @@ function hidePokemon() {
 /**
  * Animiert den Pokeball zurück zur Auswahl
  */
-function animatePokeballBack() {
+function showPokemonSelection() {
+    document.querySelector('.pokemon-selection').style.display = 'block';
+}
+
+function animatePokeballBack(showSelection = true) {
     const pokeballAnimation = document.getElementById('pokeball-animation');
     if (pokeballAnimation) {
         playPokeballSound();
@@ -332,7 +338,9 @@ function animatePokeballBack() {
             if (openBtn) {
                 openBtn.style.display = 'block';
             }
-            document.querySelector('.pokemon-selection').style.display = 'block';
+            if (showSelection) {
+                showPokemonSelection();
+            }
         }, 2000);
     }
 }
@@ -342,7 +350,7 @@ function animatePokeballBack() {
  */
 function backToBall() {
     hidePokemon();
-    animatePokeballBack();
+    animatePokeballBack(true);
 }
 
 function showFilterBTN() {

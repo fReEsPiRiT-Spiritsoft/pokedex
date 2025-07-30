@@ -370,7 +370,7 @@ img {
   font-size: 1.1rem;
   color: var(--text-light);
 }
-.card-overlay button {
+.overlayclose {
   left: 50%;
   transform: translateX(-50%);
 }
@@ -684,7 +684,7 @@ img {
 
   .pokemon-cards {
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    max-height: 250px;
+    max-height: 60%;
   }
 
   .selected-pokemon {
@@ -846,9 +846,11 @@ img {
     justify-content: flex-start;
     align-items: center;
   }
-
   #card-overlay-content {
     margin-top: 40px;
+    min-width: 180px;
+    max-width: 96vw;
+    padding: 10px 4px;
   }
 
   .nav-btn {
