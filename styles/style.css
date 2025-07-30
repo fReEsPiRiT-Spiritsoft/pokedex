@@ -675,9 +675,12 @@ img {
 
 @media (max-width: 768px) {
   .pokemon-selection {
-    height: 60vh;
+    height: 75%;
   }
-
+  .header img {
+    pointer-events: none !important;
+    z-index: 1 !important;
+  }
   .search-input {
     width: 250px;
   }
