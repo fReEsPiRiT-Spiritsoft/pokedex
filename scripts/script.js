@@ -1,97 +1,5 @@
-let allPokemon = [];
-let currentPokemon = null;
-let currentOffset = 150;
-let backgroundAudio = null;
-const API_BASE_URL = 'https://pokeapi.co/api/v2';
-
-class PokemonAPI {
-
-    /**
-     * Lädt eine bestimmte Anzahl von Pokemon aus der API
-     * @param {number} limit - Anzahl der Pokemon (Standard: 150 für Gen 1)
-     * @param {number} offset - Startpunkt (Standard: 0)
-     */
-    static async loadPokemonList(limit = 150, offset = 0) {
-        try {
-            const response = await fetch(`${API_BASE_URL}/pokemon?limit=${limit}&offset=${offset}`);
-            const data = await response.json();
-            const pokemonPromises = data.results.map(async (pokemon, index) => {
-                return await this.loadPokemonDetails(pokemon.url, index + offset + 1);
-            });
-            return await Promise.all(pokemonPromises);
-        } catch (error) {
-            return [];
-        }
-    }
-
-    /**
-     * Lädt detaillierte informationen für ein einzelnes pokemon
-     * @param {string} url - API URL des Pokemon
-     * @param {number} id - Pokemon ID
-     */
-    static async loadPokemonDetails(url, id) {
-        try {
-            const response = await fetch(url);
-            const pokemon = await response.json();
-            return {
-                id: pokemon.id,
-                name: pokemon.name,
-                germanName: await this.getGermanName(pokemon.species.url),
-                types: pokemon.types.map(type => type.type.name),
-                stats: {
-                    hp: pokemon.stats[0].base_stat,
-                    attack: pokemon.stats[1].base_stat,
-                    defense: pokemon.stats[2].base_stat,
-                    speed: pokemon.stats[5].base_stat
-                },
-                sprites: {
-                    front: pokemon.sprites.front_default,
-                    frontShiny: pokemon.sprites.front_shiny,
-                    official: pokemon.sprites.other['official-artwork'].front_default
-                },
-                height: pokemon.height,
-                weight: pokemon.weight,
-                abilities: pokemon.abilities.map(ability => ability.ability.name)
-            };
-
-        } catch (error) {
-            return null;
-        }
-    }
-
-    /**
-     * Holt den deutschen Namen des Pokemon
-     * @param {string} speciesUrl - URL der Pokemon Species
-     */
-    static async getGermanName(speciesUrl) {
-        try {
-            const response = await fetch(speciesUrl);
-            const species = await response.json();
-
-            const germanName = species.names.find(name => name.language.name === 'de');
-            return germanName ? germanName.name : species.name;
-
-        } catch (error) {
-            return 'Unbekannt';
-        }
-    }
-
-    /**
-     * Sucht Pokemon nach Namen oder ID
-     * @param {string|number} query - Suchbegriff
-     */
-    static searchPokemon(query) {
-        const searchTerm = query.toString().toLowerCase();
-        return allPokemon.filter(pokemon =>
-            pokemon.name.toLowerCase().includes(searchTerm) ||
-            pokemon.germanName.toLowerCase().includes(searchTerm) ||
-            pokemon.id.toString() === searchTerm
-        );
-    }
-}
-
 /**
- * Zeigt das ausgewählte Pokemon in der Arena an
+ * Displays the loading animation overlay.
  */
 function showLoadingAnimation() {
     const loadingScreen = document.getElementById('loading-screen');
@@ -101,7 +9,8 @@ function showLoadingAnimation() {
 }
 
 /**
- *  * Versteckt  ladeanimation und zeigt die Haupt-App an
+ * Hides the loading animation and shows the main app container.
+ * Also starts the arena video.
  */
 function hideLoadingAnimation() {
     const loadingScreen = document.getElementById('loading-screen');
@@ -109,13 +18,13 @@ function hideLoadingAnimation() {
     if (loadingScreen && mainApp) {
         loadingScreen.style.display = 'none';
         mainApp.classList.remove('hidden');
-        // Arena Video starten
+        // Start arena video
         initializeArena();
     }
 }
 
 /**
- *  Spielt das Arena video ab und zeigt das PNG bei Ende an
+ * Initializes the arena video and sets up fallback to PNG if video fails or ends.
  */
 function initializeArena() {
     const arenaVideo = document.getElementById('arena-video');
@@ -134,7 +43,7 @@ function initializeArena() {
 }
 
 /**
- *  * Video → PNG Übergang
+ * Handles the fade-out transition of the arena video and triggers the background display.
  */
 function handleArenaVideoEnd() {
     const arenaVideo = document.getElementById('arena-video');
@@ -143,19 +52,30 @@ function handleArenaVideoEnd() {
         arenaVideo.style.opacity = '0';
         arenaVideo.style.transition = 'opacity 0.5s ease-in-out';
         setTimeout(() => {
-            arenaVideo.style.display = 'none';
-            arenaBackground.classList.remove('hidden');
-            arenaBackground.style.opacity = '0';
-            arenaBackground.style.transition = 'opacity 1.5s ease-out';
-            requestAnimationFrame(() => {
-                arenaBackground.style.opacity = '1';
-            });
+            showArenaBackground(arenaVideo, arenaBackground);
         }, 100);
     }
 }
 
 /**
- *   Zeigt das ausgewählte Pokemon in der Arena an
+ * Displays the arena background image and fades it in after the video is hidden.
+ * @param {HTMLElement} arenaVideo - The video element to hide.
+ * @param {HTMLElement} arenaBackground - The background element to show.
+ */
+function showArenaBackground(arenaVideo, arenaBackground) {
+    arenaVideo.style.display = 'none';
+    arenaBackground.classList.remove('hidden');
+    arenaBackground.style.opacity = '0';
+    arenaBackground.style.transition = 'opacity 1.5s ease-out';
+    requestAnimationFrame(() => {
+        arenaBackground.style.opacity = '1';
+    });
+}
+
+/**
+ * Selects a Pokémon and transitions from selection view to arena view.
+ * Animates Pokéball and displays the selected Pokémon in the arena.
+ * @param {Object} pokemonData - The selected Pokémon object.
  */
 function selectPokemon(pokemonData) {
     currentPokemon = pokemonData;
@@ -164,19 +84,20 @@ function selectPokemon(pokemonData) {
         selection.classList.remove('active');
         selection.style.display = 'none';
     }
-        document.getElementById('open-selection-btn').style.display = 'none';
-        animatePokeballToArena(() => {
+    document.getElementById('open-selection-btn').style.display = 'none';
+    animatePokeballToArena(() => {
         displayPokemonInArena(pokemonData);
     });
 }
 
 /**
- *  * Animiert den Pokeball zur Arena und zeigt das Pokemon an
+ * Animates the Pokéball flying to the arena and calls the callback when finished.
+ * @param {Function} callback - Function to call after animation ends.
  */
 function animatePokeballToArena(callback) {
     const pokeballAnimation = document.getElementById('pokeball-animation');
     if (pokeballAnimation) {
-        playPokeballSound()
+        playPokeballSound();
         pokeballAnimation.classList.remove('hidden');
         pokeballAnimation.style.animation = 'flyToArena 2s ease-in-out forwards';
         setTimeout(() => {
@@ -189,7 +110,8 @@ function animatePokeballToArena(callback) {
 }
 
 /**
- *   Startet die große Animation und zeigt das Pokemon in der Arena an
+ * Initializes the Pokédex application: loads Pokémon, sets up UI and event listeners.
+ * @returns {Promise<void>}
  */
 async function initializePokedex() {
     showLoadingAnimation();
@@ -204,7 +126,7 @@ async function initializePokedex() {
 }
 
 /**
- *  Initialisiert alle Event Listener
+ * Sets up all main event listeners for search and filter functionality.
  */
 function setupEventListeners() {
     setupSearchListeners();
@@ -212,7 +134,7 @@ function setupEventListeners() {
 }
 
 /**
- *  Initialisiert die Event Listener für die Suchfunktion
+ * Sets up event listeners for the Pokémon search input and button.
  */
 function setupSearchListeners() {
     const searchInput = document.getElementById('pokemon-search');
@@ -229,7 +151,7 @@ function setupSearchListeners() {
 }
 
 /**
- *  Initialisiert die Event Listener für die Filter-Buttons
+ * Sets up event listeners for all filter buttons in the UI.
  */
 function setupFilterListeners() {
     const filterButtons = document.querySelectorAll('.filter-btn');
@@ -244,20 +166,24 @@ function setupFilterListeners() {
 }
 
 /**
- *  Handhabt die Suchanfragen für Pokemon
+ * Hides the 'Load More' button in the Pokémon card grid.
  */
 function hideLoadMoreButton() {
     const loadMoreBtn = document.querySelector('.load-more-card');
     if (loadMoreBtn) loadMoreBtn.style.display = 'none';
 }
 
+/**
+ * Shows the 'Load More' button in the Pokémon card grid.
+ */
 function showLoadMoreButton() {
     const loadMoreBtn = document.querySelector('.load-more-card');
     if (loadMoreBtn) loadMoreBtn.style.display = 'flex';
 }
 
-
-
+/**
+ * Handles Pokémon search input and updates the card grid accordingly.
+ */
 function handleSearch() {
     const searchInput = document.getElementById('pokemon-search');
     if (!searchInput) return;
@@ -273,7 +199,8 @@ function handleSearch() {
 }
 
 /**
- *  Filtert die Pokemon nach Typ
+ * Filters the loaded Pokémon by type and updates the card grid.
+ * @param {string} type - Pokémon type to filter by (or 'all').
  */
 function filterPokemonByType(type) {
     if (type === 'all') {
@@ -287,7 +214,8 @@ function filterPokemonByType(type) {
 }
 
 /**
- *  Zeigt die Pokemon Karten an
+ * Displays Pokémon cards in the selection grid.
+ * @param {Array} [pokemonList=allPokemon] - Array of Pokémon to display.
  */
 function displayPokemonCards(pokemonList = allPokemon) {
     const selectionSection = document.querySelector('.pokemon-selection');
@@ -301,15 +229,18 @@ function displayPokemonCards(pokemonList = allPokemon) {
         grid.style.gap = '20px';
         selectionSection.appendChild(grid);
     }
-    addPokeCard(pokemonList = allPokemon)
+    addPokeCard(pokemonList = allPokemon);
 }
 
+/**
+ * Closes the Pokémon card overlay modal.
+ */
 function closeCardOverlay() {
     document.getElementById('card-overlay').classList.add('hidden');
 }
 
 /**
- * Blendet das ausgewählte Pokemon aus
+ * Hides the currently displayed Pokémon in the arena.
  */
 function hidePokemon() {
     const selectedPokemon = document.getElementById('selected-pokemon');
@@ -319,12 +250,16 @@ function hidePokemon() {
 }
 
 /**
- * Animiert den Pokeball zurück zur Auswahl
+ * Shows the Pokémon selection view.
  */
 function showPokemonSelection() {
     document.querySelector('.pokemon-selection').style.display = 'block';
 }
 
+/**
+ * Animates the Pokéball flying back to the selection view and triggers UI updates after animation.
+ * @param {boolean} [showSelection=true] - Whether to show the selection after animation.
+ */
 function animatePokeballBack(showSelection = true) {
     const pokeballAnimation = document.getElementById('pokeball-animation');
     if (pokeballAnimation) {
@@ -332,32 +267,45 @@ function animatePokeballBack(showSelection = true) {
         pokeballAnimation.classList.remove('hidden');
         pokeballAnimation.style.animation = 'flyToSelection 2s ease-in-out forwards';
         setTimeout(() => {
-            pokeballAnimation.classList.add('hidden');
-            const openBtn = document.getElementById('open-selection-btn');
-            if (openBtn) {
-                openBtn.style.display = 'block';
-            }
-            if (showSelection) {
-                showPokemonSelection();
-            }
+            handlePokeballBackEnd(showSelection);
         }, 2000);
     }
 }
 
 /**
- * Blendet das ausgewählte Pokemon wieder aus und zeigt die Auswahl an
+ * Handles the UI updates after the Pokéball back animation ends.
+ * @param {boolean} showSelection - Whether to show the selection after animation.
+ */
+function handlePokeballBackEnd(showSelection) {
+    const pokeballAnimation = document.getElementById('pokeball-animation');
+    if (pokeballAnimation) pokeballAnimation.classList.add('hidden');
+    const openBtn = document.getElementById('open-selection-btn');
+    if (openBtn) openBtn.style.display = 'block';
+    if (showSelection) showPokemonSelection();
+}
+
+/**
+ * Hides the current Pokémon and animates the Pokéball back to selection.
  */
 function backToBall() {
     hidePokemon();
     animatePokeballBack(true);
 }
 
+/**
+ * Toggles the visibility of the filter button group in the UI.
+ */
 function showFilterBTN() {
     const filterBtn = document.getElementById('show-filter-btn');
-    const filterContainer = document.querySelector('div.filter-btn-group'); // Der Container!
+    const filterContainer = document.querySelector('div.filter-btn-group');
     filterContainer.classList.toggle('hidden');
 }
 
+/**
+ * Loads more Pokémon from the API and appends them to the current list.
+ * Updates the card grid and hides the loading animation.
+ * @returns {Promise<void>}
+ */
 async function loadMorePokemonFromAPI() {
     showLoadingAnimation();
     try {
@@ -371,6 +319,9 @@ async function loadMorePokemonFromAPI() {
     }
 }
 
+/**
+ * Sets up hover event listeners to show/hide the close hint in the Pokémon info box.
+ */
 function showCloseInformation() {
     const infoBox = document.getElementById('pokemon-info');
     const closeHint = document.getElementById('close-hint');
@@ -384,73 +335,104 @@ function showCloseInformation() {
     }
 }
 
-function displayPokemonInArena(pokemonData) {
+/**
+ * Updates the arena UI elements to display the selected Pokémon.
+ * Sets sprite, name, types, and stats, and triggers animation.
+ * @param {Object} pokemonData - The Pokémon object containing all display data.
+ */
+function updateArenaUI(pokemonData) {
     const selectedPokemon = document.getElementById('selected-pokemon');
     const pokemonSprite = document.getElementById('pokemon-sprite');
     const pokemonName = document.getElementById('pokemon-name');
     const pokemonTypes = document.getElementById('pokemon-types');
     const pokemonStats = document.getElementById('pokemon-stats');
+
     if (selectedPokemon && pokemonSprite && pokemonName) {
-        const arenaHTML = getPokemonArenaHTML(pokemonData);
-        pokemonSprite.src = arenaHTML.spriteSrc;
-        pokemonSprite.alt = arenaHTML.spriteAlt;
-        pokemonName.textContent = arenaHTML.name;
-        if (pokemonTypes) {
-            pokemonTypes.innerHTML = arenaHTML.typesHTML;
-        }
-        if (pokemonStats) {
-            pokemonStats.innerHTML = arenaHTML.statsHTML;
-        }
-        selectedPokemon.classList.remove('hidden');
-        selectedPokemon.style.animation = 'pokemonAppear 1s ease-in-out forwards';
-        showCloseInformation()
-        playPokemonCry(pokemonData.id.toString().padStart(3, '0'), pokemonData.name);
+        setPokemonElements(pokemonData, pokemonSprite, pokemonName, pokemonTypes, pokemonStats);
+        showPokemon(selectedPokemon);
     }
 }
 
 /**
- *  Aktiviert den Hintergrundsound bei Benutzerinteraktionen
+ * Sets the content of the arena UI elements for the selected Pokémon.
+ * @param {Object} data - The Pokémon data object.
+ * @param {HTMLElement} spriteEl - The image element for the Pokémon sprite.
+ * @param {HTMLElement} nameEl - The element for the Pokémon name.
+ * @param {HTMLElement} typesEl - The element for the Pokémon types.
+ * @param {HTMLElement} statsEl - The element for the Pokémon stats.
  */
-function enableBackgroundSoundOnUserAction() {
-    function startSound() {
-        playBackgroundSound();
-        document.removeEventListener('touchstart', startSound);
-        document.removeEventListener('click', startSound);
-    }
-    document.addEventListener('touchstart', startSound, { once: true });
-    document.addEventListener('click', startSound, { once: true });
+function setPokemonElements(data, spriteEl, nameEl, typesEl, statsEl) {
+    const arenaHTML = getPokemonArenaHTML(data);
+    spriteEl.src = arenaHTML.spriteSrc;
+    spriteEl.alt = arenaHTML.spriteAlt;
+    nameEl.textContent = arenaHTML.name;
+    if (typesEl) typesEl.innerHTML = arenaHTML.typesHTML;
+    if (statsEl) statsEl.innerHTML = arenaHTML.statsHTML;
 }
 
+/**
+ * Shows the Pokémon container in the arena and triggers the appear animation.
+ * @param {HTMLElement} container - The container element to show.
+ */
+function showPokemon(container) {
+    container.classList.remove('hidden');
+    container.style.animation = 'pokemonAppear 1s ease-in-out forwards';
+}
+/**
+ * Displays the selected Pokémon in the arena, shows info hint and plays the Pokémon cry.
+ * @param {Object} pokemonData - The Pokémon object to display.
+ */
+function displayPokemonInArena(pokemonData) {
+    updateArenaUI(pokemonData);
+    showCloseInformation();
+    playPokemonCry(pokemonData.id.toString().padStart(3, '0'), pokemonData.name);
+}
+
+/**
+ * Sets up event listener for opening the Pokémon selection view when the Pokéball button is clicked.
+ */
 document.addEventListener('DOMContentLoaded', () => {
     const openBtn = document.getElementById('open-selection-btn');
     const selection = document.querySelector('.pokemon-selection');
     if (openBtn && selection) {
         openBtn.addEventListener('click', () => {
             selection.classList.add('active');
-            openBtn.style.display = 'none'; // Pokeball-Button ausblenden
+            openBtn.style.display = 'none';
         });
     }
 });
 
-// Öffnen des Modals
+/**
+ * Opens the settings/info modal when the settings button is clicked.
+ */
 document.getElementById('settings-btn').onclick = function() {
     document.getElementById('settings-modal').classList.remove('hidden');
 };
-// Schließen des Modals
+
+/**
+ * Closes the settings/info modal when the close button is clicked.
+ */
 document.getElementById('close-settings-modal').onclick = function() {
     document.getElementById('settings-modal').classList.add('hidden');
 };
-// Schließen beim Klick auf Overlay
+
+/**
+ * Closes the settings/info modal when the overlay is clicked.
+ */
 document.querySelector('.modal-overlay').onclick = function() {
     document.getElementById('settings-modal').classList.add('hidden');
 };
-// Navbar-Wechsel
+
+/**
+ * Shows the selected modal section (Impressum, Copyright, Portfolio, etc.) in the settings modal.
+ * @param {string} section - Section name to show (e.g. 'impressum').
+ */
 function showModalSection(section) {
     document.querySelectorAll('.modal-section').forEach(s => s.classList.add('hidden'));
     document.getElementById('modal-' + section).classList.remove('hidden');
 }
-// App starten wenn DOM geladen ist
+
+/**
+ * Initializes the Pokédex app when the DOM is fully loaded.
+ */
 document.addEventListener('DOMContentLoaded', initializePokedex);
-
-
-

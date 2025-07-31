@@ -78,8 +78,9 @@ function getCardOverlayHTML(pokemon) {
     const abilities = Array.isArray(pokemon.abilities) && pokemon.abilities.length > 0
         ? pokemon.abilities.join(', ')
         : 'Keine Fähigkeiten gefunden';
+    const id = pokemon.id.toString().padStart(3, '0');
     return `
-        <div class="pokemon-card large">
+        <div onclick="playPokemonCry('${id}', '${pokemon.name}')" class="pokemon-card large">
             <img src="${pokemon.sprites.official || pokemon.sprites.front}" alt="${name}" style="width:180px;height:180px;">
             <h2>${name}</h2>
             <div>${pokemon.types.map(t => `<span class="type type-${t}">${getGermanTypeName(t)}</span>`).join(' ')}</div>
