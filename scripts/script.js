@@ -194,7 +194,6 @@ function animatePokeballToArena(callback) {
 async function initializePokedex() {
     showLoadingAnimation();
     try {
-        // Beim ersten Laden: allPokemon setzen!
         allPokemon = await PokemonAPI.loadPokemonList(150);
         hideLoadingAnimation();
         displayPokemonCards();
@@ -405,6 +404,7 @@ function displayPokemonInArena(pokemonData) {
         selectedPokemon.classList.remove('hidden');
         selectedPokemon.style.animation = 'pokemonAppear 1s ease-in-out forwards';
         showCloseInformation()
+        playPokemonCry(pokemonData.id.toString().padStart(3, '0'), pokemonData.name);
     }
 }
 
@@ -433,3 +433,6 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 // App starten wenn DOM geladen ist
 document.addEventListener('DOMContentLoaded', initializePokedex);
+
+
+
