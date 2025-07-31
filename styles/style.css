@@ -29,7 +29,7 @@
   flex-direction: column;
   align-items: center;
   z-index: 100;
-  pointer-events: none; 
+  /* pointer-events: none;  */
 }
 
 .header img {
@@ -671,8 +671,144 @@ img {
   font-size: 0.9rem;
   font-style: italic;
 }
+.settings-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: var(--primary);
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  font-size: 1.5rem;
+  color: var(--text-dark);
+  cursor: pointer;
+  transition: background 0.2s;
+  z-index: 101;
+}
+.settings-btn:hover {
+  background: #ffd54f;
+} 
+.settings-modal {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
+.settings-modal.hidden {
+    display: none;
+}
 
+.modal-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(30, 30, 60, 0.7);
+    z-index: 1;
+}
+
+.modal-content {
+    position: relative;
+    z-index: 2;
+    background: linear-gradient(135deg, #f7f7f7 0%, #ffe082 100%);
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    padding: 32px 24px 24px 24px;
+    max-width: 400px;
+    width: 90vw;
+    max-height: 90vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: black;
+}
+
+.modal-close {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    background: #ff1744;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    font-size: 1.3rem;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    transition: background 0.2s;
+}
+.modal-close:hover {
+    background: #d50000;
+}
+
+.modal-navbar {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 18px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.modal-nav-btn {
+    background: #ffd54f;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-size: 1rem;
+    color: #222;
+    cursor: pointer;
+    font-family: inherit;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: background 0.2s;
+}
+.modal-nav-btn:hover {
+    background: #ffecb3;
+}
+
+.modal-section {
+    margin-top: 8px;
+    width: 100%;
+    text-align: left;
+}
+
+.modal-section.hidden {
+    display: none;
+}
+.modal-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 4px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+  background: #302605;
+}
+.modal-content {
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary) rgba(255,255,255,0.1);
+}
+
+@media (max-width: 480px) {
+    .modal-content {
+        max-width: 95vw;
+        padding: 18px 8px 16px 8px;
+    }
+    .modal-navbar {
+        gap: 6px;
+    }
+}
 @media (max-width: 768px) {
   .pokemon-selection {
     height: 70%;

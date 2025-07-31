@@ -34,6 +34,81 @@
     <div id="main-app" class="main-app hidden">
         <div class="header">
             <img src="./img/logo.png" alt="">
+            <button id="settings-btn" class="settings-btn">ℹ️</button>
+        </div>
+        <!-- Modal für Einstellungen / Info -->
+        <div id="settings-modal" class="settings-modal hidden">
+            <div class="modal-overlay"></div>
+            <div class="modal-content">
+                <button class="modal-close" id="close-settings-modal">✖</button>
+                <nav class="modal-navbar">
+                    <button class="modal-nav-btn" onclick="showModalSection('impressum')">Impressum</button>
+                    <button class="modal-nav-btn" onclick="showModalSection('copyright')">Urheberrechte</button>
+                    <button class="modal-nav-btn" onclick="showModalSection('portfolio')">Portfolio</button>
+                </nav>
+                <div class="modal-section" id="modal-impressum">
+                    <h2>Impressum</h2>
+                    <p><strong>Angaben gemäß § 5 TMG:</strong></p>
+                    <p>
+                        Patrick Schmidt<br>
+                        Brüggerweg 7<br>
+                        59964 Medebach<br>
+                        Deutschland
+                    </p>
+                </div>
+                <div class="modal-section hidden" id="modal-copyright">
+                    <h2>Urheberrechte</h2>
+                    <p>
+                        Alle auf dieser Webseite verwendeten Pokémon-Grafiken, Sounds und Designelemente sind
+                        urheberrechtlich geschützt und Eigentum der jeweiligen Rechteinhaber:
+                    </p>
+                    <br>
+                    <ul>
+                        <li>
+                            <strong>Pokémon-Sounds:</strong><br>
+                            Es werden originale Soundeffekte aus dem Spiel „Pokémon GSnap“ (1999, Nintendo 64) sowie
+                            Audio-Dateien von der Plattform <a href="https://play.pokemonshowdown.com/"
+                                target="_blank">PokemonShowdown</a> verwendet. Diese Sounds sind Eigentum von Nintendo,
+                            Game Freak, Creatures Inc. und den jeweiligen Rechteinhabern.
+                        </li>
+                        <br>
+                        <li>
+                            <strong>Pokémon-Bilder:</strong><br>
+                            Die verwendeten Pokémon-Bilder stammen aus der <a href="https://pokeapi.co/"
+                                target="_blank">PokeAPI</a>, welche die offiziellen Grafiken der Pokémon bereitstellt.
+                            Diese Grafiken sind urheberrechtlich geschützt und Eigentum von Nintendo, Game Freak und
+                            Creatures Inc.
+                        </li>
+                        <br>
+                        <li>
+                            <strong>Design und Layout:</strong><br>
+                            Das Design dieser Webseite orientiert sich stark am offiziellen Stil von Nintendo und
+                            Pokémon. Alle verwendeten Designelemente, die dem Original nachempfunden sind, bleiben
+                            geistiges Eigentum von Nintendo und den jeweiligen Rechteinhabern.
+                        </li>
+                        <br>
+                        <li>
+                            <strong>Arena-Bild:</strong><br>
+                            Das eingebundene Arena-Bild ist ein offizielles Artwork von Nintendo und steht unter
+                            Copyright © 2020 Nintendo. Jegliche Nutzung außerhalb dieser, nicht-kommerziellen
+                            Webseite ist untersagt.
+                        </li>
+                    </ul>
+                    <p>
+                        <br>
+                        <em>Diese Webseite dient ausschließlich zu Lern- und Demonstrationszwecken im Rahmen eines
+                            Enwickler Portfolios. Es besteht keinerlei kommerzieller Anspruch oder Zusammenhang mit
+                            Nintendo, Game Freak, Creatures Inc. oder anderen Rechteinhabern.<br>
+                            Alle Rechte an den genannten Marken, Grafiken und Sounds verbleiben bei den jeweiligen
+                            Eigentümern.</em>
+                    </p>
+                </div>
+                <div class="modal-section hidden" id="modal-portfolio">
+                    <h2>Portfolio</h2>
+                    <p>Besuche meine Portfolio-Seite: <a href="https://patrick-schmidt.developerakademie.net/" target="_blank">Hier
+                            klicken</a></p>
+                </div>
+            </div>
         </div>
         <!-- Pokemon Arena Section -->
         <section id="pokemon-arena" class="pokemon-arena">
@@ -49,7 +124,8 @@
                 <img id="arena-background" class="arena-background hidden" src="./img/arena.png" alt="Pokemon Arena">
 
                 <div id="open-selection-btn" class="open-selection-btn">
-                    <img src="./img/ball-pokemon-unscreen.gif" onclick="playBackgroundSound()" alt="Pokeball auswählen" />
+                    <img src="./img/ball-pokemon-unscreen.gif" onclick="playBackgroundSound()"
+                        alt="Pokeball auswählen" />
                 </div>
                 <!-- Ausgewähltes Pokemon in der Arena -->
                 <div id="selected-pokemon" class="selected-pokemon hidden">

@@ -431,6 +431,24 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// Öffnen des Modals
+document.getElementById('settings-btn').onclick = function() {
+    document.getElementById('settings-modal').classList.remove('hidden');
+};
+// Schließen des Modals
+document.getElementById('close-settings-modal').onclick = function() {
+    document.getElementById('settings-modal').classList.add('hidden');
+};
+// Schließen beim Klick auf Overlay
+document.querySelector('.modal-overlay').onclick = function() {
+    document.getElementById('settings-modal').classList.add('hidden');
+};
+// Navbar-Wechsel
+function showModalSection(section) {
+    document.querySelectorAll('.modal-section').forEach(s => s.classList.add('hidden'));
+    document.getElementById('modal-' + section).classList.remove('hidden');
+}
 // App starten wenn DOM geladen ist
 document.addEventListener('DOMContentLoaded', initializePokedex);
 
