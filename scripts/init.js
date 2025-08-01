@@ -70,6 +70,19 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /**
+ * Sets up an event listener to close the card overlay when clicking outside from the modal.
+ */
+document.addEventListener('DOMContentLoaded', () => {
+    const backgrnd = document.getElementById('arena-background');
+    const closeBtn = document.getElementById('close-card-overlay');
+    if (backgrnd && closeBtn) {
+        backgrnd.addEventListener('click', () => {
+            closeBtn.click();
+        });
+    }
+});
+
+/**
  * Sets up event listener for opening the Pokémon selection view when the Pokéball button is clicked.
  */
 document.addEventListener('DOMContentLoaded', () => {
