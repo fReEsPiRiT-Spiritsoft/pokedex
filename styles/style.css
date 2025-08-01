@@ -959,10 +959,16 @@ img {
     align-items: center;
   }
 }
+@media (min-width: 3200px) {
+  .selected-pokemon {
+    top: 60% !important;
+    left: 42%;
+  }
+}
 
 @media (min-width: 2400px) {
   .selected-pokemon {
-    top: 60%;
+    top: 46%;
     left: 42%;
     transform: translate(-50%, -50%);
     width: 36vw;
@@ -1016,6 +1022,7 @@ img {
     max-width: 1920px;
     margin-bottom: 407px !important;
     margin: auto !important;
+    height: 75vh;
   }
   .pokemon-cards {
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
