@@ -50,6 +50,26 @@ function getPokemonAbilities(pokemon) {
 }
 
 /**
+ * Sets up an event listener to close the card overlay when clicking outside the content area or buttons.
+ * The overlay is only closed if the user clicks directly on the overlay background,
+ * not on the overlay content or any buttons inside the overlay.
+ */
+document.addEventListener('DOMContentLoaded', () => {
+    const overlay = document.getElementById('card-overlay');
+    const overlayContent = document.getElementById('card-overlay-content');
+    const closeBtn = document.getElementById('close-card-overlay');
+    overlay.addEventListener('click', function (event) {
+        if (
+            event.target === overlay &&
+            event.target !== overlayContent &&
+            !overlayContent.contains(event.target)
+        ) {
+            closeBtn.click();
+        }
+    });
+});
+
+/**
  * Sets up event listener for opening the Pokémon selection view when the Pokéball button is clicked.
  */
 document.addEventListener('DOMContentLoaded', () => {
