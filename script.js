@@ -385,6 +385,7 @@ function showPokemon(container) {
     container.classList.remove('hidden');
     container.style.animation = 'pokemonAppear 1s ease-in-out forwards';
 }
+
 /**
  * Displays the selected Pokémon in the arena, shows info hint and plays the Pokémon cry.
  * @param {Object} pokemonData - The Pokémon object to display.
@@ -394,18 +395,3 @@ function displayPokemonInArena(pokemonData) {
     showCloseInformation();
     playPokemonCry(pokemonData.id.toString().padStart(3, '0'), pokemonData.name);
 }
-
-/**
- * Sets up event listener for opening the Pokémon selection view when the Pokéball button is clicked.
- */
-document.addEventListener('DOMContentLoaded', () => {
-    const openBtn = document.getElementById('open-selection-btn');
-    const selection = document.querySelector('.pokemon-selection');
-    if (openBtn && selection) {
-        openBtn.addEventListener('click', () => {
-            selection.classList.add('active');
-            selection.style.display = 'block';
-            // openBtn.style.display = 'none';
-        });
-    }
-});
