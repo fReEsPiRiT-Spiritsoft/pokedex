@@ -50,6 +50,35 @@ function getPokemonAbilities(pokemon) {
 }
 
 /**
+ * Creates and appends the "Load More Pokémon" card to the grid.
+ */
+function loadMorePokemonTemplate() {
+    const grid = document.getElementById('pokemon-cards');
+    if (!grid) return;
+    const moreCard = document.createElement('div');
+    moreCard.className = 'pokemon-card load-more-card';
+    moreCard.innerHTML = loadMorePokemonHTML();
+    moreCard.onclick = () => loadMorePokemonFromAPI();
+    grid.appendChild(moreCard);
+}
+
+/**
+ * Prepares the arena data for a Pokémon and returns an object with HTML strings.
+ * This function does NOT contain any direct HTML.
+ * @param {Object} pokemonData - The Pokémon object.
+ * @returns {Object} Object with spriteSrc, spriteAlt, name, typesHTML, and statsHTML.
+ */
+function getPokemonArenaHTML(pokemonData) {
+    return {
+        spriteSrc: pokemonData.sprites.official || pokemonData.sprites.front,
+        spriteAlt: pokemonData.germanName,
+        name: pokemonData.germanName,
+        typesHTML: pokemonTypesArenaTemplate(pokemonData.types),
+        statsHTML: pokemonStatsArenaTemplate(pokemonData.stats)
+    };
+}
+
+/**
  * Sets up an event listener to close the card overlay when clicking outside the content area or buttons.
  * The overlay is only closed if the user clicks directly on the overlay background,
  * not on the overlay content or any buttons inside the overlay.

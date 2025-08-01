@@ -1,32 +1,28 @@
-function getPokemonArenaHTML(pokemonData) {
-    const typesHTML = pokemonData.types
-        .map(type => `<span class="type type-${type}">${getGermanTypeName(type)}</span>`)
-        .join('');
-    const statsHTML = `
+function pokemonStatsArenaTemplate(stats) {
+    return `
         <div class="stat">
             <span>KP:</span>
-            <span>${pokemonData.stats.hp}</span>
+            <span>${stats.hp}</span>
         </div>
         <div class="stat">
             <span>Angriff:</span>
-            <span>${pokemonData.stats.attack}</span>
+            <span>${stats.attack}</span>
         </div>
         <div class="stat">
             <span>Verteidigung:</span>
-            <span>${pokemonData.stats.defense}</span>
+            <span>${stats.defense}</span>
         </div>
         <div class="stat">
             <span>Initiative:</span>
-            <span>${pokemonData.stats.speed}</span>
+            <span>${stats.speed}</span>
         </div>
     `;
-    return {
-        spriteSrc: pokemonData.sprites.official || pokemonData.sprites.front,
-        spriteAlt: pokemonData.germanName,
-        name: pokemonData.germanName,
-        typesHTML,
-        statsHTML
-    };
+}
+
+function pokemonTypesArenaTemplate(types) {
+    return types
+        .map(type => `<span class="type type-${type}">${getGermanTypeName(type)}</span>`)
+        .join('');
 }
 
 function getGermanTypeName(englishType) {
@@ -53,18 +49,12 @@ function getGermanTypeName(englishType) {
     return typeTranslations[englishType] || englishType;
 }
 
-function loadMorePokemonTemplate() {
-    const grid = document.getElementById('pokemon-cards');
-    if (!grid) return;
-    const moreCard = document.createElement('div');
-    moreCard.className = 'pokemon-card load-more-card';
-    moreCard.innerHTML = `
+function loadMorePokemonHTML() {
+    return `
         <img src="./img/more.png" alt="Mehr laden" style="width:100px;height:100px;">
         <h3>Mehr laden</h3>
         <div><span>Weitere Pokémon anzeigen</span></div>
     `;
-    moreCard.onclick = () => loadMorePokemonFromAPI();
-    grid.appendChild(moreCard);
 }
 
 function cardOverlayTemplate(data) {
