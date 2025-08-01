@@ -1,4 +1,55 @@
 /**
+ * Prepares the data object for the Pokémon overlay card template.
+ * @param {Object} pokemon - The Pokémon object.
+ * @returns {Object} Prepared data for the template.
+ */
+function prepareCardOverlayData(pokemon) {
+    return {
+        id: pokemon.id.toString().padStart(3, '0'),
+        englishName: pokemon.name,
+        name: pokemon.germanName || pokemon.name || 'Unbekannt',
+        sprite: pokemon.sprites.official || pokemon.sprites.front,
+        typesHTML: pokemonTypesTemplate(pokemon.types),
+        statsHTML: pokemonStatsTemplate(pokemon.stats || {}),
+        size: getPokemonSize(pokemon),
+        abilities: getPokemonAbilities(pokemon)
+    };
+}
+
+/**
+ * Returns the HTML string for the Pokémon overlay card.
+ * @param {Object} pokemon - The Pokémon object.
+ * @returns {string} HTML string for the overlay card.
+ */
+function getCardOverlayHTML(pokemon) {
+    const data = prepareCardOverlayData(pokemon);
+    return cardOverlayTemplate(data);
+}
+
+/**
+ * Returns the formatted size object for the Pokémon.
+ * @param {Object} pokemon - The Pokémon object.
+ * @returns {Object} Object with height and weight as strings.
+ */
+function getPokemonSize(pokemon) {
+    return {
+        height: pokemon.height ? pokemon.height / 10 + ' m' : '-',
+        weight: pokemon.weight ? pokemon.weight / 10 + ' kg' : '-'
+    };
+}
+
+/**
+ * Returns the formatted abilities string for the Pokémon.
+ * @param {Object} pokemon - The Pokémon object.
+ * @returns {string} Abilities as a comma-separated string or fallback.
+ */
+function getPokemonAbilities(pokemon) {
+    return Array.isArray(pokemon.abilities) && pokemon.abilities.length > 0
+        ? pokemon.abilities.join(', ')
+        : 'Keine Fähigkeiten gefunden';
+}
+
+/**
  * Sets up event listener for opening the Pokémon selection view when the Pokéball button is clicked.
  */
 document.addEventListener('DOMContentLoaded', () => {

@@ -1,6 +1,3 @@
-/**
- *  Zeigt das ausgewählte Pokemon in der Arena an
- */
 function getPokemonArenaHTML(pokemonData) {
     const typesHTML = pokemonData.types
         .map(type => `<span class="type type-${type}">${getGermanTypeName(type)}</span>`)
@@ -32,9 +29,6 @@ function getPokemonArenaHTML(pokemonData) {
     };
 }
 
-/**
- *  Übersetzt den englischen Typennamen in den deutschen Typennamen
- */
 function getGermanTypeName(englishType) {
     const typeTranslations = {
         'fire': 'Feuer',
@@ -73,27 +67,34 @@ function loadMorePokemonTemplate() {
     grid.appendChild(moreCard);
 }
 
-function getCardOverlayHTML(pokemon) {
-    const name = pokemon.germanName || pokemon.name || 'Unbekannt';
-    const abilities = Array.isArray(pokemon.abilities) && pokemon.abilities.length > 0
-        ? pokemon.abilities.join(', ')
-        : 'Keine Fähigkeiten gefunden';
-    const id = pokemon.id.toString().padStart(3, '0');
+function cardOverlayTemplate(data) {
     return `
-        <div onclick="playPokemonCry('${id}', '${pokemon.name}')" class="pokemon-card large">
-            <img src="${pokemon.sprites.official || pokemon.sprites.front}" alt="${name}" style="width:180px;height:180px;">
-            <h2>${name}</h2>
-            <div>${pokemon.types.map(t => `<span class="type type-${t}">${getGermanTypeName(t)}</span>`).join(' ')}</div>
+        <div onclick="playPokemonCry('${data.id}', '${data.englishName}')" class="pokemon-card large">
+            <img src="${data.sprite}" alt="${data.name}" style="width:180px;height:180px;">
+            <h2>${data.name}</h2>
+            <div>${data.typesHTML}</div>
             <div class="pokemon-stats">
-                <div class="stat"><span>KP:</span><span>${pokemon.stats?.hp ?? '-'}</span></div>
-                <div class="stat"><span>Angriff:</span><span>${pokemon.stats?.attack ?? '-'}</span></div>
-                <div class="stat"><span>Verteidigung:</span><span>${pokemon.stats?.defense ?? '-'}</span></div>
-                <div class="stat"><span>Initiative:</span><span>${pokemon.stats?.speed ?? '-'}</span></div>
+                ${data.statsHTML}
             </div>
-            <div>Größe: ${pokemon.height ? pokemon.height / 10 + ' m' : '-' } &nbsp; Gewicht: ${pokemon.weight ? pokemon.weight / 10 + ' kg' : '-'}</div>
-            <div>Fähigkeiten: ${abilities}</div>
+            <div>Größe: ${data.size.height} &nbsp; Gewicht: ${data.size.weight}</div>
+            <div>Fähigkeiten: ${data.abilities}</div>
         </div>
     `;
+}
+
+function pokemonStatsTemplate(stats) {
+    return `
+        <div class="stat"><span>KP:</span><span>${stats.hp ?? '-'}</span></div>
+        <div class="stat"><span>Angriff:</span><span>${stats.attack ?? '-'}</span></div>
+        <div class="stat"><span>Verteidigung:</span><span>${stats.defense ?? '-'}</span></div>
+        <div class="stat"><span>Initiative:</span><span>${stats.speed ?? '-'}</span></div>
+    `;
+}
+
+function pokemonTypesTemplate(types) {
+    return types.map(
+        t => `<span class="type type-${t}">${getGermanTypeName(t)}</span>`
+    ).join(' ');
 }
 
 function getPokemonCardHTML(pokemon) {
