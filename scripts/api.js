@@ -158,7 +158,6 @@ static buildPokemonObject(pokemon, germanName) {
     static searchPokemon(query) {
         const searchTerm = query.toString().toLowerCase();
         return allPokemon.filter(pokemon =>
-            pokemon.name.toLowerCase().includes(searchTerm) ||
             pokemon.germanName.toLowerCase().includes(searchTerm) ||
             pokemon.id.toString() === searchTerm
         );

@@ -17,7 +17,7 @@
     <link rel="icon" href="./icons/fav.ico" type="image/x-icon">
 </head>
 
-<body onload="enableBackgroundSoundOnUserAction();">
+<body>
     <!-- Ladescreen mit Pokeball Animation -->
     <div id="loading-screen" class="loading-screen">
         <div class="pokeball-loader">
@@ -157,10 +157,12 @@
 
         <section id="pokemon-selection" class="pokemon-selection">
             <div class="selection-header">
+                <button onclick="goHome()" id="home-btn" class="switch-btn">🏠</button>
                 <div class="view-switch">
                     <button id="arena-view-btn" class="switch-btn active">← Arena</button>
                     <span class="switch-label">Ansicht wechseln</span>
                     <button id="card-view-btn" class="switch-btn">Kartenansicht →</button>
+                    
 
                 </div>
                 <input type="range" id="volumeMusik" name="volume" min="0" max="11" />

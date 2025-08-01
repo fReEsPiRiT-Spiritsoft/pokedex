@@ -72,6 +72,12 @@ function showArenaBackground(arenaVideo, arenaBackground) {
     });
 }
 
+function goHome() {
+    const selection = document.querySelector('.pokemon-selection');
+        selection.classList.remove('active');
+        selection.style.display = 'none';
+}
+
 /**
  * Selects a Pokémon and transitions from selection view to arena view.
  * Animates Pokéball and displays the selected Pokémon in the arena.
@@ -290,6 +296,7 @@ function handlePokeballBackEnd(showSelection) {
 function backToBall() {
     hidePokemon();
     animatePokeballBack(true);
+    
 }
 
 /**
@@ -397,7 +404,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (openBtn && selection) {
         openBtn.addEventListener('click', () => {
             selection.classList.add('active');
-            openBtn.style.display = 'none';
+            selection.style.display = 'block';
+            // openBtn.style.display = 'none';
         });
     }
 });
