@@ -52,40 +52,87 @@ class PokemonAPI {
         }
     }
 
-    /**
-     * Loads detailed information for a single Pokémon from the API.
-     * @param {string} url - API URL of the Pokémon.
-     * @param {number} id - Pokémon ID.
-     * @returns {Promise<Object|null>} Pokémon object or null if failed.
-     */
-    static async loadPokemonDetails(url, id) {
-        try {
-            const response = await fetch(url);
-            const pokemon = await response.json();
-            return {
-                id: pokemon.id,
-                name: pokemon.name,
-                germanName: await this.getGermanName(pokemon.species.url),
-                types: pokemon.types.map(type => type.type.name),
-                stats: {
-                    hp: pokemon.stats[0].base_stat,
-                    attack: pokemon.stats[1].base_stat,
-                    defense: pokemon.stats[2].base_stat,
-                    speed: pokemon.stats[5].base_stat
-                },
-                sprites: {
-                    front: pokemon.sprites.front_default,
-                    frontShiny: pokemon.sprites.front_shiny,
-                    official: pokemon.sprites.other['official-artwork'].front_default
-                },
-                height: pokemon.height,
-                weight: pokemon.weight,
-                abilities: pokemon.abilities.map(ability => ability.ability.name)
-            };
-        } catch (error) {
-            return null;
-        }
+/**
+ * Loads detailed information for a single Pokémon from the API and returns a structured Pokémon object.
+ * @param {string} url - API URL of the Pokémon.
+ * @param {number} id - Pokémon ID.
+ * @returns {Promise<Object|null>} Pokémon object with all relevant fields, or null if loading fails.
+ */
+static async loadPokemonDetails(url, id) {
+    try {
+        const pokemon = await this.fetchPokemonData(url);
+        const germanName = await this.getGermanName(pokemon.species.url);
+        return this.buildPokemonObject(pokemon, germanName);
+    } catch (error) {
+        return null;
     }
+}
+
+/**
+ * Fetches the raw Pokémon data from the API.
+ * @param {string} url - API URL of the Pokémon.
+ * @returns {Promise<Object>} Raw Pokémon data object from the API.
+ */
+static async fetchPokemonData(url) {
+    const response = await fetch(url);
+    return await response.json();
+}
+
+/**
+ * Parses the base stats from the Pokémon data object.
+ * @param {Object} pokemon - Raw Pokémon data object.
+ * @returns {Object} Object containing hp, attack, defense, and speed stats.
+ */
+static parsePokemonStats(pokemon) {
+    return {
+        hp: pokemon.stats[0].base_stat,
+        attack: pokemon.stats[1].base_stat,
+        defense: pokemon.stats[2].base_stat,
+        speed: pokemon.stats[5].base_stat
+    };
+}
+
+/**
+ * Parses the sprite URLs from the Pokémon data object.
+ * @param {Object} pokemon - Raw Pokémon data object.
+ * @returns {Object} Object containing URLs for front, frontShiny, and official artwork sprites.
+ */
+static parsePokemonSprites(pokemon) {
+    return {
+        front: pokemon.sprites.front_default,
+        frontShiny: pokemon.sprites.front_shiny,
+        official: pokemon.sprites.other['official-artwork'].front_default
+    };
+}
+
+/**
+ * Parses the abilities from the Pokémon data object.
+ * @param {Object} pokemon - Raw Pokémon data object.
+ * @returns {Array<string>} Array of ability names.
+ */
+static parsePokemonAbilities(pokemon) {
+    return pokemon.abilities.map(ability => ability.ability.name);
+}
+
+/**
+ * Builds a structured Pokémon object from raw data and the German name.
+ * @param {Object} pokemon - Raw Pokémon data object.
+ * @param {string} germanName - German name of the Pokémon.
+ * @returns {Object} Structured Pokémon object with all relevant fields.
+ */
+static buildPokemonObject(pokemon, germanName) {
+    return {
+        id: pokemon.id,
+        name: pokemon.name,
+        germanName,
+        types: pokemon.types.map(type => type.type.name),
+        stats: this.parsePokemonStats(pokemon),
+        sprites: this.parsePokemonSprites(pokemon),
+        height: pokemon.height,
+        weight: pokemon.weight,
+        abilities: this.parsePokemonAbilities(pokemon)
+    };
+}
 
     /**
      * Retrieves the German name of a Pokémon species from the API.
