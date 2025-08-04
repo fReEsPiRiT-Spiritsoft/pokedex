@@ -128,10 +128,19 @@ img {
   align-items: center;
   flex-direction: column;
   z-index: 9999;
+  font-family: 'PokemonSolid', sans-serif !important;
+  letter-spacing: 2.5px;
+  font-size: 30px;
+}
+.loading-screen p {
+  font-family: 'PokemonSolid', sans-serif !important;
+  letter-spacing: 2.5px;
+  font-size: 40px;
 }
 
 .pokeball-loader {
   text-align: center;
+  
 }
 
 .pokeball {
@@ -735,6 +744,8 @@ img {
   cursor: pointer;
   transition: background 0.2s;
   z-index: 101;
+  font-family: 'PokemonSolid', sans-serif !important;
+  letter-spacing: 2.5px;
 }
 .settings-btn:hover {
   background: #ffd54f;
@@ -746,6 +757,12 @@ img {
     display: flex;
     align-items: center;
     justify-content: center;
+    
+}
+.settings-modal h2 {
+  font-family: 'PokemonSolid', sans-serif !important;
+  letter-spacing: 3.5px;
+  font-size: 20px;
 }
 
 .settings-modal.hidden {
