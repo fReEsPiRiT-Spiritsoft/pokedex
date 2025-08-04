@@ -121,7 +121,6 @@ document.addEventListener('DOMContentLoaded', () => {
         openBtn.addEventListener('click', () => {
             selection.classList.add('active');
             selection.style.display = 'block';
-            // openBtn.style.display = 'none';
         });
     }
 });

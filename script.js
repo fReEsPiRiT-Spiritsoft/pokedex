@@ -18,7 +18,6 @@ function hideLoadingAnimation() {
     if (loadingScreen && mainApp) {
         loadingScreen.style.display = 'none';
         mainApp.classList.remove('hidden');
-        // Start arena video
         initializeArena();
     }
 }
