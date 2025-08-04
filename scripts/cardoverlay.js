@@ -1,9 +1,9 @@
-let viewMode = 'arena'; // 'arena' oder 'card'
+let viewMode = 'arena';
 let currentCardIndex = 0;
 
 /**
- *  umschaltet zwischen Arena- und Kartenansicht
- * @param {string} mode - 'arena' oder 'card'
+ *  switch between arena and card view
+ * @param {string} mode - 'arena' or 'card'
  */
 document.getElementById('arena-view-btn').onclick = () => {
     viewMode = 'arena';
@@ -55,7 +55,9 @@ function displayPokemonCards(pokemonList = allPokemon) {
 }
 
 /**
- *  Öffnet das Overlay für die Pokemon-Karte
+ *  Open the card overlay for a specific Pokémon Card
+ * @param {Object} pokemon - Pokémon data object
+ * @param {number} idx - Index of the Pokémon in the list
  */
 function openCardOverlay(pokemonList, idx) {
     playCardSwitchSound();
@@ -66,28 +68,48 @@ function openCardOverlay(pokemonList, idx) {
     setupCardOverlayNavigation(pokemonList);
 }
 
+
+/**
+ * Setup navigation for the card overlay.
+ * @param {Array} pokemonList - List of all Pokémon.
+ */
 function setupCardOverlayNavigation(pokemonList) {
     document.getElementById('prev-pokemon').onclick = () => prevPokemon(pokemonList);
     document.getElementById('next-pokemon').onclick = () => nextPokemon(pokemonList);
     document.getElementById('close-card-overlay').onclick = closeCardOverlay;
 }
 
+/**
+ * Goes to the previous Pokémon in the list.
+ *  @param {Array} pokemonList - List of all Pokémon.
+ */
 function prevPokemon(pokemonList) {
     currentCardIndex = (currentCardIndex - 1 + pokemonList.length) % pokemonList.length;
     renderCardOverlayContent(pokemonList[currentCardIndex]);
     playCardSwitchSound();
 }
 
+/**
+ *  Goes to the next Pokémon in the list.
+ * @param {Array} pokemonList - List of all Pokémon.
+ */
 function nextPokemon(pokemonList) {
     currentCardIndex = (currentCardIndex + 1) % pokemonList.length;
     renderCardOverlayContent(pokemonList[currentCardIndex]);
     playCardSwitchSound();
 }
 
+/**
+ *  Closes the card overlay.
+ */
 function closeCardOverlay() {
     document.getElementById('card-overlay').classList.add('hidden');
 }
 
+/** *  Generates the HTML for the Pokémon card overlay.
+ * @param {Object} pokemon - Pokémon data object
+ * @return {string} HTML string for the Pokémon card overlay
+ */
 function renderCardOverlayContent(pokemon) {
     const content = document.getElementById('card-overlay-content');
     content.className = 'card-overlay-content';

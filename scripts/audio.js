@@ -44,11 +44,9 @@ function playCardSwitchSound() {
 }
 
 /**
- * Plays the background music in a loop.
- * Volume is controlled by the music volume slider.
- * Initializes the backgroundAudio object if not already created.
+ * Initializes the background audio object if not already created and sets the volume.
  */
-function playBackgroundSound() {
+function initBackgroundAudio() {
     if (!backgroundAudio) {
         backgroundAudio = new Audio('./sounds/backgroundmusik.mp3');
         backgroundAudio.loop = true;
@@ -59,7 +57,22 @@ function playBackgroundSound() {
         volume = Math.max(0, Math.min(1, volumeSlider.value / 11));
     }
     backgroundAudio.volume = volume;
-    backgroundAudio.play();
+}
+
+/**
+ * Plays the background music only when it is ready.
+ * Calls initBackgroundAudio() before attempting to play.
+ */
+function playBackgroundSound() {
+    initBackgroundAudio();
+    if (backgroundAudio.readyState >= 4) {
+        backgroundAudio.play();
+    } else {
+        backgroundAudio.addEventListener('canplaythrough', function handler() {
+            backgroundAudio.removeEventListener('canplaythrough', handler);
+            backgroundAudio.play();
+        });
+    }
 }
 
 /**
