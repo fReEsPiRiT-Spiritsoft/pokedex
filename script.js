@@ -193,14 +193,14 @@ function handleSearch() {
     const searchInput = document.getElementById('pokemon-search');
     if (!searchInput) return;
     const query = searchInput.value.trim();
-    if (query) {
+    if (query.length >= 3) {
         const searchResults = PokemonAPI.searchPokemon(query);
         displayPokemonCards(searchResults);
         hideLoadMoreButton();
-    } else {
+    } else if (query.length === 0) {
         displayPokemonCards();
         showLoadMoreButton();
-    }
+    } 
 }
 
 /**
